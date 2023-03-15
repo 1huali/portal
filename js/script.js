@@ -7,6 +7,8 @@ prototype 1
 $(document).ready(function(){
 
     let thoughtsArray=[];
+    let savedArray=[];
+
     let totalSoloBox = document.getElementById("totalSolo");
     let totalGlobalBox = document.getElementById("totalGlobal");
     let totalGlobalCount= 0;
@@ -16,6 +18,8 @@ $(document).ready(function(){
 
     let submitButton= document.getElementById("submitButton");
     let submitOff=false;
+
+    let locationDataBox = document.getElementById('locationData');
 
     //user can submit one thought per day:
     submitButton.addEventListener("click", function(){
@@ -52,7 +56,6 @@ $(document).ready(function(){
               mainMap.touchZoom.disable();
        mainMap.doubleClickZoom.disable();
        mainMap.scrollWheelZoom.disable();
-   new L.Control.Zoom({ position: 'bottomleft' }).addTo(mainMap);
        //source : https://mathi330.github.io/cart351/Demo/demo.html
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 9, // you cannot zoom in more than 9, if set to 10, the map turns gray
@@ -75,5 +78,21 @@ L.tileLayer.kitten = function() {
 }
 L.tileLayer.kitten().addTo(mainMap);
 
+mainMap.on('click', onMapClick);
+
+function onMapClick(e){
+    console.log("clicked on map");
+
+    coordinateMarker
+    .setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
+    .addTo(mainMap); // add the marker to the map
+    locationDataBox.value = e.latlng;
+
+    document.getElementById("input-modal").style="display:block";
+    // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
+
+
+
+}
 
 }); //end windowOnLoad

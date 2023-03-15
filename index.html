@@ -37,10 +37,31 @@
 <span id="totalSolo">#solo</span> / <span id="totalGlobal">#total</span>
 </section>
 <!-- input zone -->
-<section id="inputZone">
-  you just found the portal
-  <span style="color: rgb(229, 58, 204) ;"> enter a thought : </span> <input id="userInput">
-  <button id="submitButton">Submit</button>
+<div id="input-modal" class="modals">
+<section id="inputZone" >
+  <fieldset>
+    <p>Add one thought per day in the void of collective minds!</p>
+    <span style="color: rgb(229, 58, 204) ;">Thought: </span> <input id="userInput" required>
+    <p>Authorize location<input type="checkbox" name="locationAutorization" id="authorizeLocation"></p>
+    <p><input id="locationData" type = "text" size="30" maxlength = "40"></p>
+    <p><label for="icon">Icon </label>
+      <select id="icon" name="an_icon">
+        <option value="☆">☆</option>
+        <option value="♥">♥</option>
+        <option value="¥">¥</option>
+        <option value="✿" selected>✿</option>
+        <option value="other">Other</option>
+        <!-- if other : allow typing -->
+      </select></p>
+      <input id="submitButton" type="submit" value="Submit">
+  </fieldset>
+</section>
+</div>
+
+<section id="mainBarZone">
+  you just found the portal -----------------------------------------------------------
+
+  custom theme: 
  <select id="customThemeMenu">
    <option value="0"> ♥
    <option value="1"> ✧
@@ -48,7 +69,14 @@
    <option value="3"> ♡
    <option value="4"> ♫
  </select>
- 
+
+ saved:
+ <select name="saved" id="savedThoughts">
+ <option value="0"> none
+</select>
+
+<button id="about-button">?</button>
+
 </section>
 
     <!-- My script(s) -->
