@@ -1,0 +1,20 @@
+class Thought {
+
+    constructor(thought,lat,lng,sound,icon){
+        this.thought= "";
+        this.map= map;
+        this.n_latLng = new L.latLng(lat,lng);
+        this.sound=sound;
+        this.icon="";
+
+        //about the growth :
+      this.currentText= "seed";
+      this.state= ["seed", "sprout", "bud", "flower"];
+
+    }
+
+    display(){
+
+    }
+    
+}

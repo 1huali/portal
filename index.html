@@ -25,17 +25,36 @@
   </head>
 
   <body>
-
+<!-- map -->
     <div id="mapBox">
       <div class="map" id="mainMap"></div>
       </div> 
 
-<h1>garden here</h1>
-<!-- <div id="thought-modal" class="modals">HELLO</div> -->
-
+    <div id="thought-modal" class="modals">HELLO</div>
+<!-- multiplayer data zone -->
+<section id="multiplayerDataZone">
+  <article>online : #ppl</article>
+<span id="totalSolo">#solo</span> / <span id="totalGlobal">#total</span>
+</section>
+<!-- input zone -->
+<section id="inputZone">
+  you just found the portal
+  <span style="color: rgb(229, 58, 204) ;"> enter a thought : </span> <input id="userInput">
+  <button id="submitButton">Submit</button>
+ <select id="customThemeMenu">
+   <option value="0"> ♥
+   <option value="1"> ✧
+   <option value="2"> ❀
+   <option value="3"> ♡
+   <option value="4"> ♫
+ </select>
+ 
+</section>
 
     <!-- My script(s) -->
     <script src="js/script.js"></script>
+    <script src="js/Thought.js"></script>
+
   </body>
 
 </html>

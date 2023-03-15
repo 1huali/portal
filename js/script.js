@@ -6,16 +6,53 @@ prototype 1
 "use strict";
 $(document).ready(function(){
 
+    let thoughtsArray=[];
+    let totalSoloBox = document.getElementById("totalSolo");
+    let totalGlobalBox = document.getElementById("totalGlobal");
+    let totalGlobalCount= 0;
+    let totalLocalCount= 0;
+    totalSoloBox.innerHTML=totalLocalCount;
+    totalGlobalBox.innerHTML=totalGlobalCount;
+
+    let submitButton= document.getElementById("submitButton");
+    let submitOff=false;
+
+    //user can submit one thought per day:
+    submitButton.addEventListener("click", function(){
+//One submission per day:
+        if (submitOff === false){
+            let inputThought = document.getElementById("userInput");
+            thoughtsArray.push(inputThought.value);
+            console.log(thoughtsArray);
+            inputThought.value = "";
+
+            //24 hours timer
+            submitOff=true;
+            setTimeout(() => {
+                submitOff=false;
+                console.log("24 hours passed");
+              }, "86400000");
+        } else if (submitOff === true){
+            console.log("come back tmr");
+        }
+
+    });
+
+    //user gets a single thought:
+    let dailyThoughtBox = document.getElementById("thought-modal");
+    dailyThoughtBox.addEventListener("click", function(){
+        console.log("thought clicked");
+        dailyThoughtBox.style= "display : none";
+    })
+
            //MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
        // We create a leaflet map, and in setView, we determine coordinates and zoom level
        let mainMap = L.map('mainMap').setView([45.50884, -73.58781], 19);
        let coordinateMarker = L.marker();
-       
-    //    $(".leaflet-control-zoom").css("visibility", "hidden");
-       mainMap.touchZoom.disable();
+              mainMap.touchZoom.disable();
        mainMap.doubleClickZoom.disable();
        mainMap.scrollWheelZoom.disable();
-
+   new L.Control.Zoom({ position: 'bottomleft' }).addTo(mainMap);
        //source : https://mathi330.github.io/cart351/Demo/demo.html
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 9, // you cannot zoom in more than 9, if set to 10, the map turns gray
@@ -33,11 +70,9 @@ L.TileLayer.Kitten = L.TileLayer.extend({
         return "<a href='https://placekitten.com/attribution.html'>Void</a>"
     }
 });
-
 L.tileLayer.kitten = function() {
     return new L.TileLayer.Kitten();
 }
-
 L.tileLayer.kitten().addTo(mainMap);
 
 

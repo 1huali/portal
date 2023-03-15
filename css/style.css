@@ -25,7 +25,7 @@ body{
       #mapBox{
         position: relative;
         margin: 0px;
-        padding: 2px;
+        /* padding: 2px; */
         top: 0;
         left: 0;
         width: 100vw;
@@ -33,6 +33,27 @@ body{
         z-index: 1;
       }
 
+      #inputZone{
+        background-color: blue;
+        position: absolute;
+        z-index: 5;
+        width: 100vw;
+        bottom: 0;
+        left: 0;
+      }
+        #multiplayerDataZone{
+        background-color: blue;
+        position: absolute;
+        z-index: 5;
+        width: 20vw;
+        height: max-content;
+        right: 0;
+        top: 0;
+      }
+
+      #customMenu{
+        width: max-content;
+      }
 /* modal boxes */
 .modals {
         position: absolute;
@@ -46,6 +67,11 @@ body{
 
 #thought-modal{
     /* background-color: blue; */
+    top: 35%;
+    left: 35%;
     text-align: center;
+    display: block;
 }
+
+
 
