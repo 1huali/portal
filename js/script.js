@@ -24,12 +24,14 @@ $(document).ready(function(){
     let inputThought = document.getElementById("userInput");
     let locationDataBox = document.getElementById('locationData');
     let icon = document.getElementById("icon");
+    let sound = document.getElementById("chimeSound");
+
 
     //user gets a single thought:
     let dailyThoughtBox = document.getElementById("thought-modal");
     dailyThoughtBox.addEventListener("click", function(){
-        console.log("thought clicked");
         dailyThoughtBox.style= "display : none";
+        sound.play();
     })
 
            //MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
@@ -71,7 +73,6 @@ function onMapClick(e){
     .addTo(mainMap); // add the marker to the map
     locationDataBox.value = e.latlng;
     onSubmit(e);
-
     document.getElementById("input-modal").style="display:block";
     // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
 
@@ -86,10 +87,11 @@ function onSubmit(e){
                 let thought = inputThought.value;
                 newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
                 thoughtsArray.push(newThought);
-
+                sound.play();
                 // console.log(newThought);
                 console.log(thoughtsArray);
                 inputThought.value = "";
+                document.getElementById("input-modal").style="display:none";
     
                 //24 hours timer
                 submitOff=true;
@@ -97,7 +99,7 @@ function onSubmit(e){
                 //     submitOff=false;
                 //     console.log("24 hours passed");
                 //   }, "86400000");
-                
+
                 //temporary 2 second timer :
                     setTimeout(() => {
                     submitOff=false;
@@ -105,6 +107,7 @@ function onSubmit(e){
                   }, "2000");
 
             } else if (submitOff === true){
+                document.getElementById("input-modal").style="display:none";
                 console.log("come back tmr");
             }
     
