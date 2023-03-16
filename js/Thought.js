@@ -14,7 +14,6 @@ class Thought {
         this.icon=icon;
         this.saved=false;
         this.arrayNumber=""
-
         //about the growth :
     //   this.currentText= "seed";
     //   this.state= ["seed", "sprout", "bud", "flower"];

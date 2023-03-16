@@ -97,11 +97,13 @@ function onSubmit(e){
                 //     submitOff=false;
                 //     console.log("24 hours passed");
                 //   }, "86400000");
+                
                 //temporary 2 second timer :
                     setTimeout(() => {
                     submitOff=false;
                     console.log(submitOff);
                   }, "2000");
+
             } else if (submitOff === true){
                 console.log("come back tmr");
             }
