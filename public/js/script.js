@@ -78,7 +78,6 @@ function onMapClick(e){
 
 }
 
-
 function onSubmit(e){
  //user can submit one thought per day:
  submitButton.addEventListener("click", function(){
@@ -87,6 +86,8 @@ function onSubmit(e){
                 let thought = inputThought.value;
                 newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
                 thoughtsArray.push(newThought);
+                //submitting values to db : 
+                passingTheVars(e);
                 sound.play();
                 // console.log(newThought);
                 console.log(thoughtsArray);
@@ -115,5 +116,15 @@ function onSubmit(e){
     
 }
 
+function passingTheVars(e){
+    //ajax GET() request : MAKE AS A FUNCTION and put in submit
+$.get(
+ "/thoughtSubmit", //the url page where the response is coming from
+ {Thought : inputThought.value, Date : date, Lat : e.latlng.lat, Lng : e.latlng.lng, Icon: icon.value, Saved : newThought.saved},
+// if we get a response from the server .... 
+ function(response) {
+    console.log('page content: ' + response);
+ }); //get
+}
 
 }); //end windowOnLoad
