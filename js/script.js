@@ -19,28 +19,11 @@ $(document).ready(function(){
     let submitButton= document.getElementById("submitButton");
     let submitOff=false;
 
+    let newThought="";
+    let date = new Date();
+    let inputThought = document.getElementById("userInput");
     let locationDataBox = document.getElementById('locationData');
-
-    //user can submit one thought per day:
-    submitButton.addEventListener("click", function(){
-//One submission per day:
-        if (submitOff === false){
-            let inputThought = document.getElementById("userInput");
-            thoughtsArray.push(inputThought.value);
-            console.log(thoughtsArray);
-            inputThought.value = "";
-
-            //24 hours timer
-            submitOff=true;
-            setTimeout(() => {
-                submitOff=false;
-                console.log("24 hours passed");
-              }, "86400000");
-        } else if (submitOff === true){
-            console.log("come back tmr");
-        }
-
-    });
+    let icon = document.getElementById("icon");
 
     //user gets a single thought:
     let dailyThoughtBox = document.getElementById("thought-modal");
@@ -87,12 +70,45 @@ function onMapClick(e){
     .setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
     .addTo(mainMap); // add the marker to the map
     locationDataBox.value = e.latlng;
+    onSubmit(e);
 
     document.getElementById("input-modal").style="display:block";
     // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
 
-
-
 }
+
+
+function onSubmit(e){
+ //user can submit one thought per day:
+ submitButton.addEventListener("click", function(){
+    //One submission per day:
+            if (submitOff === false){
+                let thought = inputThought.value;
+                newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
+                thoughtsArray.push(newThought);
+
+                // console.log(newThought);
+                console.log(thoughtsArray);
+                inputThought.value = "";
+    
+                //24 hours timer
+                submitOff=true;
+                // setTimeout(() => {
+                //     submitOff=false;
+                //     console.log("24 hours passed");
+                //   }, "86400000");
+                //temporary 2 second timer :
+                    setTimeout(() => {
+                    submitOff=false;
+                    console.log(submitOff);
+                  }, "2000");
+            } else if (submitOff === true){
+                console.log("come back tmr");
+            }
+    
+        });
+    
+}
+
 
 }); //end windowOnLoad
