@@ -65,6 +65,26 @@ L.tileLayer.kitten().addTo(mainMap);
 
 mainMap.on('click', onMapClick);
 
+           //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
+//set up the client socket to connect to the socket.io server
+let io_socket = io();
+let clientSocket = io_socket.connect('http://localhost:4200');
+
+//emit a connect message on client side at success: 
+let socketId =-1;
+ clientSocket.on('connect', function(data) {
+      console.log("connected");
+      // put code here that should only execute once the client is connected
+      clientSocket.emit('join', 'msg:: client joined');
+      // handler for receiving client id
+      clientSocket.on("joinedClientId", function(data){
+        socketId = data;
+        console.log("myId : "+socketId);
+      });
+  });
+
+           //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
+
 function onMapClick(e){
     console.log("clicked on map");
 
@@ -117,7 +137,7 @@ function onSubmit(e){
 }
 
 function passingTheVars(e){
-    //ajax GET() request : MAKE AS A FUNCTION and put in submit
+    //ajax GET() request : 
 $.get(
  "/thoughtSubmit", //the url page where the response is coming from
  {Thought : inputThought.value, Date : date, Lat : e.latlng.lat, Lng : e.latlng.lng, Icon: icon.value, Saved : newThought.saved},
