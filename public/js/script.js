@@ -9,6 +9,30 @@ $(document).ready(function(){
     let thoughtsArray=[];
     let savedArray=[];
 
+    //TEMPORARY GROW FUNCTION TO MOVE TO thought
+    let button = document.getElementById("tempButton");
+
+    let stateIndex = 0;
+    let stateArray = [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
+    let currentText = "NULL";
+    
+    button.addEventListener("click", function (){
+        setInterval(() => {
+            grow();
+        }, 1000);
+              });
+
+    function grow (){
+        currentText= stateArray[stateIndex];
+        document.getElementById("element").innerHTML = currentText;
+    stateIndex++;
+    if (stateIndex > 5){
+        stateIndex = 5;
+    }
+    }
+
+    //end button temporary
+
     let totalSoloBox = document.getElementById("totalSolo");
     let totalGlobalBox = document.getElementById("totalGlobal");
     let totalGlobalCount= 0;
@@ -83,6 +107,13 @@ let socketId =-1;
       });
   });
 
+
+    //TEMPORARY : GROWING THOUGHT/ELEMENT 
+    // let element = document.getElementById("element");
+    // let elementPosX;
+    // let elementPosY;
+
+
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
 function onMapClick(e){
@@ -92,6 +123,17 @@ function onMapClick(e){
     .setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
     .addTo(mainMap); // add the marker to the map
     locationDataBox.value = e.latlng;
+
+    //doesn't display anymore
+    let elPosX;
+    let elPosY;
+    let element= document.getElementById("element")
+    elPosX=e.latlng.lat; 
+    elPosY=e.latlng.lng; 
+    element.style.left = `${elPosX}px`;
+    element.style.top = `${elPosY}px`; 
+    console.log(element)
+
     onSubmit(e);
     document.getElementById("input-modal").style="display:block";
     // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
@@ -109,6 +151,7 @@ function onSubmit(e){
                 //submitting values to db : 
                 passingTheVars(e);
                 sound.play();
+                newThought.display();
                 // console.log(newThought);
                 console.log(thoughtsArray);
                 inputThought.value = "";
