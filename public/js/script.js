@@ -138,7 +138,6 @@ function onSubmit(e){
                 //temporary 2 second timer :
                     setTimeout(() => {
                     submitOff=false;
-                    console.log(submitOff);
                   }, "2000");
 
             } else if (submitOff === true){

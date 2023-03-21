@@ -4,6 +4,8 @@ const portNumber=4200;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
 
+const userModel = require("./models");
+
 httpServer.listen(portNumber, function (){
     console.log("server running on port"+portNumber);
 });
@@ -30,11 +32,21 @@ function requestHandlerTest(request,response){
 
 //request to retrieve the client data from testForm and client.js :
 app.get('/thoughtSubmit',handleGetVars);
-
-function handleGetVars(request,response){
+//
+async function handleGetVars(request,response){
   console.log(request.url);
   console.log(request.query);
   response.send("GOT IT! THANKS!");
+
+  const user = new userModel(request.query);
+  //prepare for the db:
+  try {
+    await user.save();
+    response.send(user);
+  } catch (error) {
+    response.status(500).send(error);
+  }
+
 }
 
 //Sockets has 2 parts : socket.io (a server) AND socket.io-client (librairy that loads on client side)
