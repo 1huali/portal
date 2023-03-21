@@ -12,24 +12,26 @@ $(document).ready(function(){
     //TEMPORARY GROW FUNCTION TO MOVE TO thought
     let button = document.getElementById("tempButton");
 
-    let stateIndex = 0;
-    let stateArray = [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
-    let currentText = "NULL";
+    // let stateIndex = 0;
+    // let stateArray = [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
+    // let currentText = "NULL";
+    // let growingInterval;
     
-    button.addEventListener("click", function (){
-        setInterval(() => {
-            grow();
-        }, 1000);
-              });
+    // button.addEventListener("click", function (){
+    //     growingInterval = setInterval(() => {
+    //         grow();
+    //     }, 1000);
+    //           });
 
-    function grow (){
-        currentText= stateArray[stateIndex];
-        document.getElementById("element").innerHTML = currentText;
-    stateIndex++;
-    if (stateIndex > 5){
-        stateIndex = 5;
-    }
-    }
+    // function grow (){
+    //     currentText= stateArray[stateIndex];
+    //     document.getElementById("element").innerHTML = currentText;
+    // stateIndex++;
+    // if (stateIndex > 5){
+    //     clearInterval(growingInterval);
+    //     stateIndex = 5;
+    // }
+    // }
 
     //end button temporary
 
@@ -90,29 +92,22 @@ L.tileLayer.kitten().addTo(mainMap);
 mainMap.on('click', onMapClick);
 
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
-//set up the client socket to connect to the socket.io server
-let io_socket = io();
-let clientSocket = io_socket.connect('http://localhost:4200');
+// //set up the client socket to connect to the socket.io server
+// let io_socket = io();
+// let clientSocket = io_socket.connect('http://localhost:4200');
 
-//emit a connect message on client side at success: 
-let socketId =-1;
- clientSocket.on('connect', function(data) {
-      console.log("connected");
-      // put code here that should only execute once the client is connected
-      clientSocket.emit('join', 'msg:: client joined');
-      // handler for receiving client id
-      clientSocket.on("joinedClientId", function(data){
-        socketId = data;
-        console.log("myId : "+socketId);
-      });
-  });
-
-
-    //TEMPORARY : GROWING THOUGHT/ELEMENT 
-    // let element = document.getElementById("element");
-    // let elementPosX;
-    // let elementPosY;
-
+// //emit a connect message on client side at success: 
+// let socketId =-1;
+//  clientSocket.on('connect', function(data) {
+//       console.log("connected");
+//       // put code here that should only execute once the client is connected
+//       clientSocket.emit('join', 'msg:: client joined');
+//       // handler for receiving client id
+//       clientSocket.on("joinedClientId", function(data){
+//         socketId = data;
+//         console.log("myId : "+socketId);
+//       });
+//   });
 
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
@@ -125,14 +120,14 @@ function onMapClick(e){
     locationDataBox.value = e.latlng;
 
     //doesn't display anymore
-    let elPosX;
-    let elPosY;
-    let element= document.getElementById("element")
-    elPosX=e.latlng.lat; 
-    elPosY=e.latlng.lng; 
-    element.style.left = `${elPosX}px`;
-    element.style.top = `${elPosY}px`; 
-    console.log(element)
+    // let elPosX;
+    // let elPosY;
+    // let element= document.getElementById("element")
+    // elPosX=e.latlng.lat; 
+    // elPosY=e.latlng.lng; 
+    // element.style.left = `${elPosX}px`;
+    // element.style.top = `${elPosY}px`; 
+    // console.log(element)
 
     onSubmit(e);
     document.getElementById("input-modal").style="display:block";
