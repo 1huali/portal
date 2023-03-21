@@ -9,30 +9,6 @@ $(document).ready(function(){
     let thoughtsArray=[];
     let savedArray=[];
 
-    //TEMPORARY GROW FUNCTION TO MOVE TO thought
-    let button = document.getElementById("tempButton");
-
-    // let stateIndex = 0;
-    // let stateArray = [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
-    // let currentText = "NULL";
-    // let growingInterval;
-    
-    // button.addEventListener("click", function (){
-    //     growingInterval = setInterval(() => {
-    //         grow();
-    //     }, 1000);
-    //           });
-
-    // function grow (){
-    //     currentText= stateArray[stateIndex];
-    //     document.getElementById("element").innerHTML = currentText;
-    // stateIndex++;
-    // if (stateIndex > 5){
-    //     clearInterval(growingInterval);
-    //     stateIndex = 5;
-    // }
-    // }
-
     //end button temporary
 
     let totalSoloBox = document.getElementById("totalSolo");
@@ -92,22 +68,22 @@ L.tileLayer.kitten().addTo(mainMap);
 mainMap.on('click', onMapClick);
 
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
-// //set up the client socket to connect to the socket.io server
-// let io_socket = io();
-// let clientSocket = io_socket.connect('http://localhost:4200');
+//set up the client socket to connect to the socket.io server
+let io_socket = io();
+let clientSocket = io_socket.connect('http://localhost:4200');
 
-// //emit a connect message on client side at success: 
-// let socketId =-1;
-//  clientSocket.on('connect', function(data) {
-//       console.log("connected");
-//       // put code here that should only execute once the client is connected
-//       clientSocket.emit('join', 'msg:: client joined');
-//       // handler for receiving client id
-//       clientSocket.on("joinedClientId", function(data){
-//         socketId = data;
-//         console.log("myId : "+socketId);
-//       });
-//   });
+//emit a connect message on client side at success: 
+let socketId =-1;
+ clientSocket.on('connect', function(data) {
+      console.log("connected");
+      // put code here that should only execute once the client is connected
+      clientSocket.emit('join', 'msg:: client joined');
+      // handler for receiving client id
+      clientSocket.on("joinedClientId", function(data){
+        socketId = data;
+        console.log("myId : "+socketId);
+      });
+  });
 
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 

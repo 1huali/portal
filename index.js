@@ -3,7 +3,7 @@ const portNumber=4200;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
 
-app.listen(portNumber, function (){
+httpServer.listen(portNumber, function (){
     console.log("server running on port"+portNumber);
 });
 
