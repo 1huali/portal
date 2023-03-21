@@ -1,4 +1,5 @@
 let express = require('express');
+const mongoose = require("mongoose");
 const portNumber=4200;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
@@ -9,6 +10,16 @@ httpServer.listen(portNumber, function (){
 
 // directory that is made available to the public:
 app.use(express.static(__dirname + '/public'));
+
+app.use(express.json());
+// the connection string to the db:
+mongoose.connect('mongodb+srv://1huali:m351U1TQu1RmFYnl@portal.djy0yyy.mongodb.net/?retryWrites=true&w=majority');
+//the connection is stored in  variable "db" :
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error: "));
+db.once("open", function () {
+  console.log("Connected successfully");
+});
 
 //request to the index.html :
 app.get('/home',requestHandlerTest);
