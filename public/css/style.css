@@ -36,12 +36,13 @@ body{
       .thoughtEl{
         top:0px;
         left: 0px;
-        color: #ffffff;
+        color: #ffffffba;
         width: 50px;
         height: 50px;
         position:absolute;
         z-index: 100;
-        background: rgb(255, 84, 218);
+        text-align: center;
+        /* background: rgb(255, 84, 218); */
       }
 
       /* mainBarZone */

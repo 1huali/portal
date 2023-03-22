@@ -6,46 +6,12 @@ prototype 1
 "use strict";
 $(document).ready(function(){
 
-    //retrieve the varibles back from the db at page load:
-    $.get(
-        "/thoughts", //the url page where the response is coming from
-       // if we get a response from the server .... 
-        function(response) {
-           console.log(response);
-
-        }); //get
 
     let thoughtsArray=[];
     let savedArray=[];
 
-    //end button temporary
 
-    let totalSoloBox = document.getElementById("totalSolo");
-    let totalGlobalBox = document.getElementById("totalGlobal");
-    let totalGlobalCount= 0;
-    let totalLocalCount= 0;
-    totalSoloBox.innerHTML=totalLocalCount;
-    totalGlobalBox.innerHTML=totalGlobalCount;
-
-    let submitButton= document.getElementById("submitButton");
-    let submitOff=false;
-
-    let newThought="";
-    let date = new Date();
-    let inputThought = document.getElementById("userInput");
-    let locationDataBox = document.getElementById('locationData');
-    let icon = document.getElementById("icon");
-    let sound = document.getElementById("chimeSound");
-
-
-    //user gets a single thought:
-    let dailyThoughtBox = document.getElementById("thought-modal");
-    dailyThoughtBox.addEventListener("click", function(){
-        dailyThoughtBox.style= "display : none";
-        sound.play();
-    })
-
-           //MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
+               //MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
        // We create a leaflet map, and in setView, we determine coordinates and zoom level
        let mainMap = L.map('mainMap').setView([45.50884, -73.58781], 19);
        let coordinateMarker = L.marker();
@@ -74,21 +40,99 @@ L.tileLayer.kitten = function() {
 }
 L.tileLayer.kitten().addTo(mainMap);
 
+
+
+           //DB SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
+    //retrieve the varibles back from the db at page load:
+    $.get(
+        "/thoughts", //the url page where the response is coming from
+       // if we get a response from the server .... 
+        function(response) {
+
+            console.log(response);
+            //no need to parse the response ; unpack the array of the reponse :
+            for(let i = 0; i<response.length; i++){
+           thoughtsArray.push(new Thought(response[i].thought,
+            response[i].date,
+            mainMap,
+            response[i].lat,
+            response[i].lng,
+            i,
+            response[i].icon,));
+           }
+           
+           for (let i=0 ; i< thoughtsArray.length;i++){
+            thoughtsArray[i].display();
+           }
+
+    //end button temporary
+
+    let totalSoloBox = document.getElementById("totalSolo");
+    let totalGlobalBox = document.getElementById("totalGlobal");
+    let totalGlobalCount= 0;
+    let totalLocalCount= 0;
+    totalSoloBox.innerHTML=totalLocalCount;
+    totalGlobalBox.innerHTML=totalGlobalCount;
+
+    let submitButton= document.getElementById("submitButton");
+    let submitOff=false;
+
+    let newThought="";
+    let date = new Date();
+    let inputThought = document.getElementById("userInput");
+    let locationDataBox = document.getElementById('locationData');
+    let icon = document.getElementById("icon");
+    let sound = document.getElementById("chimeSound");
+
+    //user gets a single thought:
+    let dailyThoughtBox = document.getElementById("thought-modal");
+    let currentThoughtHTML= document.getElementById("currentThought");
+    //Queue settings:
+    let currentThought="";
+    currentThought = thoughtsArray[thoughtsArray.length-1].thought;
+    console.log(currentThought)    
+    currentThoughtHTML.innerHTML= currentThought;
+
+    let returningVisitor=false;
+
+    if (returningVisitor===false){
+    dailyThoughtBox.addEventListener("click", function(){
+        dailyThoughtBox.style= "display : none";
+        sound.play();
+        returningVisitor = true;
+        //24 hours until the next thought display:
+        //temporary 10 sec
+        setTimeout(() => {
+            returningVisitor=false;
+          }, "10000");
+    })
+    } else if (returningVisitor === true){
+        dailyThoughtBox.style= "display : none";
+    }
+    console.log(returningVisitor);
+        
+//retourning visitor settings:
+let creationTimestamp;
+let currentTimestamp;
+let timestampDifference;
+let oneDayTimestamp = 86400000;
+
+function ageTimer(){
+          //calculation of the age of the tree. With the age variable, we can give it an evolution tracking time stamp to assign its visual representation.
+          let date = new Date();
+          let currentTimestamp = date.getTime() - this.timeStamp; //age in minutes
+
+          timestampDifference = currentTimestamp-date;
+          console.log(timestampDifference);
+}
+ // !! 86400000 ms (jour), mais live c'est en minute pour test purposes
+
+
+
+
 mainMap.on('click', function (e){
     if (submitOff === false){
-        submitOff=true;
         onMapClick(e);
-
-                        //24 hours timer
-                // setTimeout(() => {
-                //     submitOff=false;
-                //     console.log("24 hours passed");
-                //   }, "86400000");
-
-                // temporary 2 second timer :
-                    setTimeout(() => {
-                    submitOff=false;
-                  }, "10000");
 
     } else if (submitOff === true){
         document.getElementById("input-modal").style="display:none";
@@ -142,6 +186,7 @@ function onMapClick(e){
 function onSubmit(e){
  //user can submit one thought per day:
  submitButton.addEventListener("click", function(){
+    submitOff=true;
     //One submission per day:
                 let thought = inputThought.value;
                 newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
@@ -154,20 +199,33 @@ function onSubmit(e){
                 console.log(thoughtsArray);
                 inputThought.value = "";
                 document.getElementById("input-modal").style="display:none";
+
+                                        //24 hours timer
+                // setTimeout(() => {
+                //     submitOff=false;
+                //     console.log("24 hours passed");
+                //   }, "86400000");
+
+                // temporary 10 second timer :
+                setTimeout(() => {
+                    submitOff=false;
+                  }, "10000");
     
         });
     
 }
 
+//pass inuts to db  :
 function passingTheVars(newThought){
     //ajax GET() request : 
 $.get(
  "/thoughtSubmit", //the url page where the response is coming from
- {thought : newThought.thought, date : newThought.date, icon: icon.value, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng},
+ {thought : newThought.thought, date : newThought.date, icon: newThought.icon, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng},
 // if we get a response from the server .... 
  function(response) {
     console.log('page content: ' + response);
  }); //get
 }
+}); //get
 
 }); //end windowOnLoad
