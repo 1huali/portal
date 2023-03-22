@@ -30,8 +30,6 @@ class Thought {
         this.growingInterval = setInterval(() => {
             this.grow();
         }, 1000);
-
-
     }
 
     display(){

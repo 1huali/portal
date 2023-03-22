@@ -42,7 +42,7 @@ L.tileLayer.kitten().addTo(mainMap);
 
 
 
-           //DB SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
+           //DB RETRIEVE SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
     //retrieve the varibles back from the db at page load:
     $.get(
         "/thoughts", //the url page where the response is coming from
@@ -65,8 +65,8 @@ L.tileLayer.kitten().addTo(mainMap);
             thoughtsArray[i].display();
            }
 
-    //end button temporary
 
+           //VARIABLES SETUP ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
     let totalSoloBox = document.getElementById("totalSolo");
     let totalGlobalBox = document.getElementById("totalGlobal");
     let totalGlobalCount= 0;
@@ -110,21 +110,22 @@ L.tileLayer.kitten().addTo(mainMap);
         dailyThoughtBox.style= "display : none";
     }
     console.log(returningVisitor);
-        
+       
+    //TO DO : set timer in local storage to count 24 hours :
 //retourning visitor settings:
-let creationTimestamp;
-let currentTimestamp;
-let timestampDifference;
-let oneDayTimestamp = 86400000;
+// let creationTimestamp;
+// let currentTimestamp;
+// let timestampDifference;
+// let oneDayTimestamp = 86400000;
 
-function ageTimer(){
-          //calculation of the age of the tree. With the age variable, we can give it an evolution tracking time stamp to assign its visual representation.
-          let date = new Date();
-          let currentTimestamp = date.getTime() - this.timeStamp; //age in minutes
+// function ageTimer(){
+//           //calculation of the age of the tree. With the age variable, we can give it an evolution tracking time stamp to assign its visual representation.
+//           let date = new Date();
+//           let currentTimestamp = date.getTime() - this.timeStamp; //age in minutes
 
-          timestampDifference = currentTimestamp-date;
-          console.log(timestampDifference);
-}
+//           timestampDifference = currentTimestamp-date;
+//           console.log(timestampDifference);
+// }
  // !! 86400000 ms (jour), mais live c'est en minute pour test purposes
 
 
@@ -167,15 +168,6 @@ function onMapClick(e){
     .setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
     .addTo(mainMap); // add the marker to the map
     locationDataBox.value = e.latlng;
-
-    //doesn't display anymore
-
-    // let element= document.getElementById("element")
-    // elPosX=e.latlng.lat; 
-    // elPosY=e.latlng.lng; 
-    // element.style.left = `${elPosX}px`;
-    // element.style.top = `${elPosY}px`; 
-    // console.log(element)
 
     onSubmit(e);
     document.getElementById("input-modal").style="display:block";
