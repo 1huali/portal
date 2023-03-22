@@ -1,7 +1,7 @@
 //https://www.section.io/engineering-education/nodejs-mongoosejs-mongodb/
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
+const ThoughtSchema = new mongoose.Schema({
   thought: {
     type: String,
     required: true,
@@ -36,6 +36,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model("User", UserSchema);
+const Thought = mongoose.model("thought", ThoughtSchema);
 
-module.exports = User;
+module.exports = Thought;

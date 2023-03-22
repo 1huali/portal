@@ -6,6 +6,15 @@ prototype 1
 "use strict";
 $(document).ready(function(){
 
+    //retrieve the varibles back from the db at page load:
+    $.get(
+        "/thoughts", //the url page where the response is coming from
+       // if we get a response from the server .... 
+        function(response) {
+           console.log(response);
+
+        }); //get
+
     let thoughtsArray=[];
     let savedArray=[];
 
@@ -65,7 +74,27 @@ L.tileLayer.kitten = function() {
 }
 L.tileLayer.kitten().addTo(mainMap);
 
-mainMap.on('click', onMapClick);
+mainMap.on('click', function (e){
+    if (submitOff === false){
+        submitOff=true;
+        onMapClick(e);
+
+                        //24 hours timer
+                // setTimeout(() => {
+                //     submitOff=false;
+                //     console.log("24 hours passed");
+                //   }, "86400000");
+
+                // temporary 2 second timer :
+                    setTimeout(() => {
+                    submitOff=false;
+                  }, "10000");
+
+    } else if (submitOff === true){
+        document.getElementById("input-modal").style="display:none";
+        console.log("come back tmr");
+    }
+} );
 
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 //set up the client socket to connect to the socket.io server
@@ -96,8 +125,7 @@ function onMapClick(e){
     locationDataBox.value = e.latlng;
 
     //doesn't display anymore
-    // let elPosX;
-    // let elPosY;
+
     // let element= document.getElementById("element")
     // elPosX=e.latlng.lat; 
     // elPosY=e.latlng.lng; 
@@ -115,12 +143,11 @@ function onSubmit(e){
  //user can submit one thought per day:
  submitButton.addEventListener("click", function(){
     //One submission per day:
-            if (submitOff === false){
                 let thought = inputThought.value;
                 newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
                 thoughtsArray.push(newThought);
                 //submitting values to db : 
-                passingTheVars(e);
+                passingTheVars(newThought);
                 sound.play();
                 newThought.display();
                 // console.log(newThought);
@@ -128,32 +155,15 @@ function onSubmit(e){
                 inputThought.value = "";
                 document.getElementById("input-modal").style="display:none";
     
-                //24 hours timer
-                submitOff=true;
-                // setTimeout(() => {
-                //     submitOff=false;
-                //     console.log("24 hours passed");
-                //   }, "86400000");
-
-                //temporary 2 second timer :
-                    setTimeout(() => {
-                    submitOff=false;
-                  }, "2000");
-
-            } else if (submitOff === true){
-                document.getElementById("input-modal").style="display:none";
-                console.log("come back tmr");
-            }
-    
         });
     
 }
 
-function passingTheVars(e){
+function passingTheVars(newThought){
     //ajax GET() request : 
 $.get(
  "/thoughtSubmit", //the url page where the response is coming from
- {Thought : inputThought.value, Date : date, Lat : e.latlng.lat, Lng : e.latlng.lng, Icon: icon.value, Saved : newThought.saved},
+ {thought : newThought.thought, date : newThought.date, icon: icon.value, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng},
 // if we get a response from the server .... 
  function(response) {
     console.log('page content: ' + response);

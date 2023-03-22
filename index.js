@@ -4,7 +4,7 @@ const portNumber=4200;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
 
-const userModel = require("./models");
+const thoughtModel = require("./models");
 
 httpServer.listen(portNumber, function (){
     console.log("server running on port"+portNumber);
@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.use(express.json());
 // the connection string to the db:
-mongoose.connect('mongodb+srv://1huali:m351U1TQu1RmFYnl@portal.djy0yyy.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://1huali:m351U1TQu1RmFYnl@portal.djy0yyy.mongodb.net/portal?retryWrites=true&w=majority');
 //the connection is stored in  variable "db" :
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
@@ -36,18 +36,19 @@ app.get('/thoughtSubmit',handleGetVars);
 async function handleGetVars(request,response){
   console.log(request.url);
   console.log(request.query);
-  response.send("GOT IT! THANKS!");
+  // response.send("User inpus vars received! THANKS!");
 
-  const user = new userModel(request.query);
+  const thought = new thoughtModel(request.query);
   //prepare for the db:
   try {
-    await user.save();
+    await thought.save();
     response.send(user);
   } catch (error) {
     response.status(500).send(error);
   }
 
 }
+
 
 //Sockets has 2 parts : socket.io (a server) AND socket.io-client (librairy that loads on client side)
 // declare io which mounts to our httpServer object (runs on top ... )
@@ -74,3 +75,17 @@ io.on('connect', function(socket){
   });
 
   });
+
+  //create route /users to retrieve all users saved :
+app.get("/thoughts", async (request, response) => {
+    const thoughts = await thoughtModel.find({});
+  
+    try {
+      console.log(thoughts)
+      response.send(thoughts);
+    } catch (error) {
+      response.status(500).send(error);
+    }
+  });
+
+  module.exports = app;
