@@ -8,8 +8,8 @@ class Thought {
         //to access the map to have the element div on top of the map
         this.mapLayerArray= Object.keys(this.map._layers);
         //creates a div, sets an ID : 
-        this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[1]]._container);
-        this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
+        this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
+        this.thoughtEl.setAttribute("id","thought"+arrayNumber);
 
         //physical positions:
         this.n_latLng = new L.latLng(lat,lng);

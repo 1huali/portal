@@ -42,7 +42,7 @@ body{
         position:absolute;
         z-index: 100;
         text-align: center;
-        /* background: rgb(255, 84, 218); */
+        background: rgb(255, 84, 218);
       }
 
       /* mainBarZone */
@@ -95,6 +95,18 @@ body{
   text-align: center;
   display: none;
 }
+/* fractal css */
+.fractal-palette-buttons {
+    display: inline-block;
+}
 
+.fractal-palette-button {
+    border: 2px;
+    border-radius: 5px;
+}
 
-
+.fractal-palette-button-active {
+    border-style: solid;
+    border-color: rgb(140, 140, 140);
+    background: rgb(165, 165, 165);
+}
