@@ -117,27 +117,24 @@ body{
 .thoughtHoverEl{
   color: #00ff6a;
   text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
-  background-color: rgba(255, 255, 255, 0.9);
-  width: 100px;
-  height: 100px;
+  width: max-content;
+  height: max-content;
   position:absolute;
   z-index: 100;
-  display: block;
-  box-shadow: 2px 2px 1px 3px rgb(178, 182, 183);
+  display: none;
   padding: auto;
 }
 
-/* .thoughtEl:hover + .thoughtHoverEl{
-  background-color: rgba(255, 255, 255, 0.9);
-  width: 100px;
-  height: 100px;
+.thoughtEl:hover + .thoughtHoverEl{
+  /* background-color: rgba(255, 255, 255, 0.9); */
+  width: max-content;
+  height: max-content;
   display: block;
-  box-shadow: 10px 10px 5px 12px rgb(178, 182, 183);
+  /* box-shadow: 10px 10px 5px 12px rgb(178, 182, 183); */
   text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
-  padding: 0.2px;
+  /* padding: 0.2px; */
   z-index: 200;
-
-} */
+}
 
   /* MOBILE SETUPS */
   @media only screen 
