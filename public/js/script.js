@@ -182,6 +182,8 @@ mainMap.on('click', function (e){
     }
 } );
 
+let numPplOnline=0;
+  let numPplOnlineBox= document.getElementById("numOnlineRn");
 
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 //set up the client socket to connect to the socket.io server
@@ -201,12 +203,12 @@ let socketId =-1;
       });
 
       clientSocket.on("numClients", function(data){
-        console.log(data);
-
+        numPplOnline = data
       })
   });
 
-  let numPplOnline= document.getElementById("numOnlineRn");
+  numPplOnlineBox.innerHTML= numPplOnline;
+
 
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
@@ -268,6 +270,10 @@ $.get(
     console.log('page content: ' + response);
  }); //get
 }
-}); //get
 
+function zoomElement(){
+    console.log("zoom increments size increments")
+}
+
+}); //get
 }); //end windowOnLoad

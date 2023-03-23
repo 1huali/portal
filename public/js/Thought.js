@@ -31,6 +31,27 @@ class Thought {
         this.growingInterval = setInterval(() => {
             this.grow();
         }, 1000);
+
+        // hover:
+        this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
+        //position of the hover over its obj:
+        this.thoughtHoverEl.style.top = `${this.posY-150}px`; 
+
+        this.thoughtEl.addEventListener("click", function(){
+            let thoughtHoverElClass = document.querySelectorAll(".thoughtHoverEl");
+            for (let i=0; i < thoughtHoverElClass.length; i++){
+              if (thoughtHoverElClass[i].style.display === "block"); {
+                thoughtHoverElClass[i].style.display = "none";
+              }
+              self.thoughtHoverEl.style= "display: block;"
+    
+              if (opened === true){
+                setTimeout(() => {
+                  self.thoughtHoverEl.style.display= "none"
+                }, "5000");
+          }
+            }
+        });
     }
 
     display(){
@@ -55,8 +76,6 @@ this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLaye
 this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
 this.xPos = this.point.x;
 this.yPos = this.point.y;
-console.log(this.map._layers[this.mapLayerArray[0]]._container);
-console.log("test");
     }
 
     grow(){
@@ -70,41 +89,42 @@ console.log("test");
     }
 
     hover(){
-        function dhm (ms) {
-            let days = Math.floor(ms / (24*60*60*1000));
-            let daysms = ms % (24*60*60*1000);
-            let hours = Math.floor(daysms / (60*60*1000));
-            let hoursms = ms % (60*60*1000);
-            let minutes = Math.floor(hoursms / (60*1000));
-            let minutesms = ms % (60*1000);
-            let sec = Math.floor(minutesms / 1000);
+        console.log("hvered")
+        // function dhm (ms) {
+        //     let days = Math.floor(ms / (24*60*60*1000));
+        //     let daysms = ms % (24*60*60*1000);
+        //     let hours = Math.floor(daysms / (60*60*1000));
+        //     let hoursms = ms % (60*60*1000);
+        //     let minutes = Math.floor(hoursms / (60*1000));
+        //     let minutesms = ms % (60*1000);
+        //     let sec = Math.floor(minutesms / 1000);
     
-            if (days < 0){
-              return hours + " hrs " + minutes + " mins ";
-            } else if (hours < 0){
-              return minutes + " mins " + sec + " sec ";
-            } else if (minutes < 0){
-              return sec + " sec "
-            } else {
-              //not showing properly TO FIX
-            return days + " days " + hours + " hrs " + minutes + " mins ";
-          }
-          }
+        //     if (days < 0){
+        //       return hours + " hrs " + minutes + " mins ";
+        //     } else if (hours < 0){
+        //       return minutes + " mins " + sec + " sec ";
+        //     } else if (minutes < 0){
+        //       return sec + " sec "
+        //     } else {
+        //       //not showing properly TO FIX
+        //     return days + " days " + hours + " hrs " + minutes + " mins ";
+        //   }
+        //   }
 
-          let currentAge= dhm(this.currentAge);
+        //   let currentAge= dhm(this.currentAge);
           // console.log(currentAge);
     
         //print to div :
-          this.hoverEl.innerHTML = 
-          this.thought + 
-          "<br>" + 
-          currentAge +  
-          "<br>" + 
-          '<input id="favoriteButton" class="buttons" type="button" value="♥"> <br>';
+        //   this.hoverEl.innerHTML = 
+        //   this.thought + 
+        //   "<br>" + 
+        //   currentAge +  
+        //   "<br>" + 
+        //   '<input id="favoriteButton" class="buttons" type="button" value="♥"> <br>';
     
-          document.getElementById("favoriteButton").addEventListener('click', function(){
-          console.log("favorited!!!!");
-        });
+        //   document.getElementById("favoriteButton").addEventListener('click', function(){
+        //   console.log("favorited!!!!");
+        // });
 
     }
 }

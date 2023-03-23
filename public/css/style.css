@@ -110,6 +110,31 @@ body{
     border-color: rgb(140, 140, 140);
     background: rgb(165, 165, 165);
 }
+/* hover setups */
+.thoughtHoverEl{
+  color: #000000;
+  text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 100px;
+  height: 100px;
+  position:absolute;
+  z-index: 100;
+  display: block;
+  box-shadow: 2px 2px 1px 3px rgb(178, 182, 183);
+  padding: auto;
+}
+
+/* .thoughtEl:hover + .thoughtHoverEl{
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 100px;
+  height: 100px;
+  display: block;
+  box-shadow: 10px 10px 5px 12px rgb(178, 182, 183);
+  text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+  padding: 0.2px;
+  z-index: 200;
+
+} */
 
   /* MOBILE SETUPS */
   @media only screen 
