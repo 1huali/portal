@@ -49,26 +49,29 @@ let coordinateMarker = L.marker();
 let numWorkers = 3;
 
 let layers = {
-    "mandlebrot":L.tileLayer.fractalLayer(paletteController, numWorkers).addTo(mainMap),
-    "multibrot3":L.tileLayer.fractalLayer(paletteController, numWorkers,"multibrot3",300),
-    //Dosn't work at the moment "multibrot5":L.tileLayer.fractalLayer(6,"multibrot5",200),
-    "burning ship":L.tileLayer.fractalLayer(paletteController, numWorkers,"burningShip"),
-    "tricorn":L.tileLayer.fractalLayer(paletteController, numWorkers,"tricorn"),
-    "julia -0.74543+0.11301*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia"),
-    "julia -0.75+0.11*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.75,0.11),
-    "julia -0.1+0.651*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.1,0.651),
-    "julia -0.4+0.6*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.4,0.6),
-    "julia -0.8+0.156*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.8,0.156),
-     "julia -1.118484848+0.273636364*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",300,-1.118484848,0.273636364),
-     "julia  -0.37+0.6*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.37,0.6)
+    "julia -1.118484848+0.273636364*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",300,-1.118484848,0.273636364).addTo(mainMap),
+    // "multibrot3":L.tileLayer.fractalLayer(paletteController, numWorkers,"multibrot3",300),
+    // "burning ship":L.tileLayer.fractalLayer(paletteController, numWorkers,"burningShip"),
+    // "tricorn":L.tileLayer.fractalLayer(paletteController, numWorkers,"tricorn"),
+    // "julia -0.74543+0.11301*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia"),
+    // "julia -0.75+0.11*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.75,0.11),
+    //
+    // "julia -0.1+0.651*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.1,0.651),
+    // "julia -0.4+0.6*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.4,0.6),
+    // "julia -0.8+0.156*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.8,0.156),
+    //  "julia -1.118484848+0.273636364*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",300,-1.118484848,0.273636364),
+    //
+    //  "julia  -0.37+0.6*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.37,0.6)
 }
 
 let lc=L.control.layers(layers,{},{position:"topleft",collapsed:false}).addTo(mainMap);
 
 mainMap.setView([0, -90], 2).addHash({lc:lc}).addControl(new PaletteControl(layers, {position: "topleft"}));
 
-
-
+if (L.Browser.mobile) {
+    console.log("mobile")
+   mainMap.removeControl(map.zoomControl);
+}
 
            //DB RETRIEVE SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
     //retrieve the varibles back from the db at page load:
@@ -92,6 +95,17 @@ mainMap.setView([0, -90], 2).addHash({lc:lc}).addControl(new PaletteControl(laye
            for (let i=0 ; i< thoughtsArray.length;i++){
             thoughtsArray[i].display();
            }
+
+mainMap.on('zoomend', function() {
+
+    for (let i=0;i< thoughtsArray.length; i++){
+        thoughtsArray[i].favorited();
+        thoughtsArray[i].display();
+        thoughtsArray[i].grow();
+    // console.log(thoughtsArray[i])
+    }
+
+});
 
            //VARIABLES SETUP ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
     let totalSoloBox = document.getElementById("totalSolo");
@@ -168,6 +182,7 @@ mainMap.on('click', function (e){
     }
 } );
 
+
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 //set up the client socket to connect to the socket.io server
 let io_socket = io();
@@ -184,7 +199,14 @@ let socketId =-1;
         socketId = data;
         console.log("myId : "+socketId);
       });
+
+      clientSocket.on("numClients", function(data){
+        console.log(data);
+
+      })
   });
+
+  let numPplOnline= document.getElementById("numOnlineRn");
 
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
@@ -234,7 +256,8 @@ function onSubmit(e){
     
 }
 
-//pass inuts to db  :
+
+//pass inputs to db  :
 function passingTheVars(newThought){
     //ajax GET() request : 
 $.get(

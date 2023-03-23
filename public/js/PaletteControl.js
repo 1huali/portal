@@ -1,6 +1,6 @@
 let PaletteControl = L.Control.extend({
     options: {
-        initPalette: 'hsv'
+        initPalette: 'green'
     },
     initialize: function(fractalLayers, options) {
         L.setOptions(this, options);

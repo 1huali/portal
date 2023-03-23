@@ -42,12 +42,12 @@ body{
         position:absolute;
         z-index: 100;
         text-align: center;
-        background: rgb(255, 84, 218);
+        /* background: rgb(255, 84, 218); */
       }
 
       /* mainBarZone */
       #mainBarZone{
-        background-color: blue;
+        /* background-color: blue; */
         position: absolute;
         z-index: 5;
         width: 100vw;
@@ -55,7 +55,7 @@ body{
         left: 0;
       }
         #multiplayerDataZone{
-        background-color: blue;
+        /* background-color: blue; */
         position: absolute;
         z-index: 5;
         width: 20vw;
@@ -71,7 +71,7 @@ body{
 .modals {
         position: absolute;
         z-index: 20;
-        background-color: #ec77ac;
+        background-color: #000000;
         border: 1px solid #d3d3d3;
         /* padding: 5px; */
         width: 300px;
@@ -89,7 +89,7 @@ body{
 }
 
 #input-modal{
-  background-color: #ec77ac;
+  /* background-color: #ec77ac; */
   right: 1%;
   bottom: 5%;
   text-align: center;
@@ -110,3 +110,16 @@ body{
     border-color: rgb(140, 140, 140);
     background: rgb(165, 165, 165);
 }
+
+  /* MOBILE SETUPS */
+  @media only screen 
+  and (min-device-width: 360px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+    *{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size:40px;
+  }
+  }

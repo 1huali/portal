@@ -72,6 +72,9 @@ io.on('connect', function(socket){
      console.log('a new user with id ' + clientIdIncrementing + " has entered");
      //keep track of the ids
      clientIds.push({id:clientIdIncrementing,socketId:socket.id});
+     //to broadcast emit the number of client (label(numClient), value)
+     io.emit("numClients", clientIds.length);
+
   });
 
   });

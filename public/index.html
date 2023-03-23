@@ -18,7 +18,6 @@
     <!-- leaflet map -->
           <!-- Leaflet Javascript file -->
           <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-          <!-- integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="crossorigin=""></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
     <script src="js/libraries/jquery-ui.js"></script> 
     <script src="/socket.io/socket.io.js"></script>
@@ -40,13 +39,10 @@
       <div class="map" id="mainMap"></div>
       </div> 
 
-      <!-- temporary button -->
-      <input type="button" id="tempButton" value="next">
-
     <div id="thought-modal" class="modals"> <span id="currentThought"> HELLO</span></div>
 <!-- multiplayer data zone -->
 <section id="multiplayerDataZone">
-  <article>online : #ppl</article>
+  <article>online : <span id="numOnlineRn"> #ppl</span></article>
 <span id="totalSolo">#solo</span> / <span id="totalGlobal">#total</span>
 </section>
 <!-- input zone -->
@@ -72,8 +68,8 @@
 </div>
 
 <section id="mainBarZone">
-  you just found the portal -----------------------------------------------------------
-
+  you just found the portal 
+<article id="options-box">
   custom theme: 
  <select id="customThemeMenu">
    <option value="0"> ♥
@@ -89,7 +85,7 @@
 </select>
 
 <button id="about-button">?</button>
-
+</article>
 </section>
 
     <!-- My script(s) -->

@@ -7,9 +7,10 @@ class Thought {
         this.map= map;
         //to access the map to have the element div on top of the map
         this.mapLayerArray= Object.keys(this.map._layers);
+       // console.log(this.map);
         //creates a div, sets an ID : 
         this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
-        this.thoughtEl.setAttribute("id","thought"+arrayNumber);
+        this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
 
         //physical positions:
         this.n_latLng = new L.latLng(lat,lng);
@@ -20,7 +21,7 @@ class Thought {
         // this.sound="";
         this.icon=icon;
         this.saved=false;
-        this.arrayNumber=""
+        this.arrayNumber=arrayNumber;
         //about the growth :
         this.stateArray= [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
         this.stateIndex = 0;
@@ -35,6 +36,9 @@ class Thought {
     display(){
 //display randomly new flowers where the pin is at
       //position of the center of the flower canvas :
+
+    
+
       this.thoughtEl.style.left = `${this.xPos-50}px`;
       this.thoughtEl.style.top = `${this.yPos-50}px`; 
 
@@ -45,8 +49,14 @@ class Thought {
 
     }
 
-    saved(){
+    favorited(){
 //if saved, goes in the favorite array (local storage)
+this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
+this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
+this.xPos = this.point.x;
+this.yPos = this.point.y;
+console.log(this.map._layers[this.mapLayerArray[0]]._container);
+console.log("test");
     }
 
     grow(){
@@ -57,5 +67,44 @@ class Thought {
     clearInterval(this.growingInterval);
     this.stateIndex = 5;
     }
+    }
+
+    hover(){
+        function dhm (ms) {
+            let days = Math.floor(ms / (24*60*60*1000));
+            let daysms = ms % (24*60*60*1000);
+            let hours = Math.floor(daysms / (60*60*1000));
+            let hoursms = ms % (60*60*1000);
+            let minutes = Math.floor(hoursms / (60*1000));
+            let minutesms = ms % (60*1000);
+            let sec = Math.floor(minutesms / 1000);
+    
+            if (days < 0){
+              return hours + " hrs " + minutes + " mins ";
+            } else if (hours < 0){
+              return minutes + " mins " + sec + " sec ";
+            } else if (minutes < 0){
+              return sec + " sec "
+            } else {
+              //not showing properly TO FIX
+            return days + " days " + hours + " hrs " + minutes + " mins ";
+          }
+          }
+
+          let currentAge= dhm(this.currentAge);
+          // console.log(currentAge);
+    
+        //print to div :
+          this.hoverEl.innerHTML = 
+          this.thought + 
+          "<br>" + 
+          currentAge +  
+          "<br>" + 
+          '<input id="favoriteButton" class="buttons" type="button" value="♥"> <br>';
+    
+          document.getElementById("favoriteButton").addEventListener('click', function(){
+          console.log("favorited!!!!");
+        });
+
     }
 }
