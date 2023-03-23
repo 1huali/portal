@@ -35,7 +35,9 @@ class Thought {
         // hover:
         this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
         //position of the hover over its obj:
-        this.thoughtHoverEl.style.top = `${this.posY-150}px`; 
+        this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
+        this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
+
 
         this.thoughtEl.addEventListener("click", function(){
             let thoughtHoverElClass = document.querySelectorAll(".thoughtHoverEl");
@@ -69,13 +71,21 @@ class Thought {
     }
 
     }
-
+//call reprint:
     favorited(){
 //if saved, goes in the favorite array (local storage)
 this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
 this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
 this.xPos = this.point.x;
 this.yPos = this.point.y;
+        // hover:
+        this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
+        //position of the hover over its obj:
+        this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
+        this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
+
+        this.hover();
+
     }
 
     grow(){
@@ -115,16 +125,16 @@ this.yPos = this.point.y;
           // console.log(currentAge);
     
         //print to div :
-        //   this.hoverEl.innerHTML = 
-        //   this.thought + 
-        //   "<br>" + 
+          this.thoughtHoverEl.innerHTML = 
+          this.thought + 
+          "<br>" + 
         //   currentAge +  
         //   "<br>" + 
-        //   '<input id="favoriteButton" class="buttons" type="button" value="♥"> <br>';
+          '<input id="favoriteButton" class="buttons" type="button" value="♥"> <br>';
     
-        //   document.getElementById("favoriteButton").addEventListener('click', function(){
-        //   console.log("favorited!!!!");
-        // });
+          document.getElementById("favoriteButton").addEventListener('click', function(){
+          console.log("favorited!!!!");
+        });
 
     }
 }

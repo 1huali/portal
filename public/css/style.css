@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-size:18px;
+    /* font-size:18px; */
 }
 
 body{
@@ -11,6 +11,8 @@ body{
     width: 100vw;
     height: 100vh;
     padding: 3px;
+    font-size:18px;
+
     }
 
 
@@ -35,6 +37,7 @@ body{
 
       .thoughtEl{
         top:0px;
+        font-size: 20px;
         left: 0px;
         color: #ffffffba;
         width: 50px;
@@ -112,7 +115,7 @@ body{
 }
 /* hover setups */
 .thoughtHoverEl{
-  color: #000000;
+  color: #00ff6a;
   text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
   background-color: rgba(255, 255, 255, 0.9);
   width: 100px;

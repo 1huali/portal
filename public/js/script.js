@@ -80,7 +80,7 @@ if (L.Browser.mobile) {
        // if we get a response from the server .... 
         function(response) {
 
-            console.log(response);
+            // console.log(response);
             //no need to parse the response ; unpack the array of the reponse :
             for(let i = 0; i<response.length; i++){
            thoughtsArray.push(new Thought(response[i].thought,
@@ -107,6 +107,13 @@ mainMap.on('zoomend', function() {
 
 });
 
+mainMap.on("zoom", function(){
+    //   let fontSize= 18;
+// fontSize++;
+  console.log("fontSize");
+//  thoughtEl.style.font-size = fontSize+'px';
+});
+
            //VARIABLES SETUP ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
     let totalSoloBox = document.getElementById("totalSolo");
     let totalGlobalBox = document.getElementById("totalGlobal");
@@ -131,7 +138,6 @@ mainMap.on('zoomend', function() {
     //Queue settings:
     let currentThought="";
     currentThought = thoughtsArray[thoughtsArray.length-1].thought;
-    console.log(currentThought)    
     currentThoughtHTML.innerHTML= currentThought;
 
     let returningVisitor=false;
@@ -203,12 +209,14 @@ let socketId =-1;
       });
 
       clientSocket.on("numClients", function(data){
-        numPplOnline = data
+        numPplOnline = data;
+        numPplOnlineBox.innerHTML= numPplOnline;
+//
       })
   });
 
-  numPplOnlineBox.innerHTML= numPplOnline;
-
+  //global thoughtcount :
+  document.getElementById("totalGlobal").innerHTML = thoughtsArray.length;
 
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
@@ -271,9 +279,25 @@ $.get(
  }); //get
 }
 
-function zoomElement(){
-    console.log("zoom increments size increments")
+function zoomIn()
+{
+//   let Page = document.getElementById('Body');
+//   Page.style.zoom + 10 +'%'
+//   Page.style.zoom = zoom;
+//   console.log(zoom)
+//   return false;
+
 }
+
+function zoomOut()
+{
+//   let fontSize= 18;
+
+// fontSize++;
+//   console.log(fontSize);
+//  thoughtEl.style.font-size = fontSize+'px';
+}
+
 
 }); //get
 }); //end windowOnLoad
