@@ -37,27 +37,29 @@ class Thought {
         //position of the hover over its obj:
         this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
         this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
+      
+        // this.favButton = `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`
 
+//transfered to script :
+    //     this.thoughtEl.addEventListener("click", function(){
+    //         let thoughtHoverElClass = document.querySelectorAll(".thoughtHoverEl");
 
-        this.thoughtEl.addEventListener("click", function(){
-            let thoughtHoverElClass = document.querySelectorAll(".thoughtHoverEl");
-
-            for (let i=0; i < thoughtHoverElClass.length; i++){
-              if (thoughtHoverElClass[i].style.display === "block"); {
-                thoughtHoverElClass[i].style.display = "none";
-                opened=false;
-              }
-              self.thoughtHoverEl.style= "display: block;"
-              opened=true;
-    //?? cant stay opened at click
-              if (opened === true){
-                setTimeout(() => {
-                  self.thoughtHoverEl.style.display= "none"
-                  opened=false;
-                }, "5000");
-          }
-            }
-        });
+    //         for (let i=0; i < thoughtHoverElClass.length; i++){
+    //           if (thoughtHoverElClass[i].style.display === "block"); {
+    //             thoughtHoverElClass[i].style.display = "none";
+    //             opened=false;
+    //           }
+    //           self.thoughtHoverEl.style= "display: block;"
+    //           opened=true;
+    // //?? cant stay opened at click
+    //           if (opened === true){
+    //             setTimeout(() => {
+    //               self.thoughtHoverEl.style.display= "none"
+    //               opened=false;
+    //             }, "5000");
+    //       }
+    //         }
+    //     });
     }
 
     display(){
@@ -76,7 +78,7 @@ class Thought {
 
     }
 //call reprint:
-    favorited(){
+reprint(){
 //if saved, goes in the favorite array (local storage)
 this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
 this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
@@ -102,20 +104,24 @@ this.yPos = this.point.y;
     }
     }
 
-    hover(){
-        console.log("hvered")
-    
+    hover(){    
         //print to div :
           this.thoughtHoverEl.innerHTML = 
           this.thought + 
           " __" + 
         //   currentAge +  
         //   "<br>" + 
-          '<input id="favoriteButton" class="buttons" type="button" value="♥"> <br>';
-    
-          document.getElementById("favoriteButton").addEventListener('click', function(){
-          console.log("favorited!!!!");
+          `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`;
+
+
+    //if favorite button clicked; turn off
+          document.getElementById("favoriteButton"+this.thoughtEl.id).addEventListener('click', function(){
+            this.saved=true;
         });
 
+    }
+
+    saveFavorite(){
+      // this.saved=true;
     }
 }

@@ -37,7 +37,7 @@ body{
 
       .thoughtEl{
         top:0px;
-        font-size: 20px;
+        font-size: 2px;
         left: 0px;
         color: #ffffffba;
         width: 50px;
@@ -121,7 +121,8 @@ body{
   height: max-content;
   position:absolute;
   z-index: 100;
-  display: none;
+  /* display: none; */
+  display: block;
   padding: auto;
 }
 

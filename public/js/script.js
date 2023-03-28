@@ -43,6 +43,7 @@ $(document).ready(function(){
             //FRACTAL MAP SETUP ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 // http://aparshin.github.io/leaflet-fractal/#julia_1.1184848480.273636364i/1/5/15
 
+//default zoom : 10
 let mainMap = L.map('mainMap', {minZoom:1});
 let coordinateMarker = L.marker();
 
@@ -66,7 +67,8 @@ let layers = {
 
 let lc=L.control.layers(layers,{},{position:"topleft",collapsed:false}).addTo(mainMap);
 
-mainMap.setView([0, -90], 2).addHash({lc:lc}).addControl(new PaletteControl(layers, {position: "topleft"}));
+mainMap.setView([0, -90], 1).addHash({lc:lc}).addControl(new PaletteControl(layers, {position: "topleft"}));
+// mainMap.setZoom(1);
 
 if (L.Browser.mobile) {
     console.log("mobile")
@@ -94,25 +96,23 @@ if (L.Browser.mobile) {
            
            for (let i=0 ; i< thoughtsArray.length;i++){
             thoughtsArray[i].display();
+            thoughtsArray[i].hover();
            }
 
 mainMap.on('zoomend', function() {
 
     for (let i=0;i< thoughtsArray.length; i++){
-        thoughtsArray[i].favorited();
+        //reprint at every zoom : 
+        thoughtsArray[i].reprint();
         thoughtsArray[i].display();
         thoughtsArray[i].grow();
-    // console.log(thoughtsArray[i])
+        // thoughtsArray[i].saveFavorite();
     }
+    
+    zoomObj();
 
 });
 
-mainMap.on("zoom", function(){
-    //   let fontSize= 18;
-// fontSize++;
-  console.log("fontSize");
-//  thoughtEl.style.font-size = fontSize+'px';
-});
 
            //VARIABLES SETUP ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
     let totalSoloBox = document.getElementById("totalSolo");
@@ -156,7 +156,7 @@ mainMap.on("zoom", function(){
     } else if (returningVisitor === true){
         dailyThoughtBox.style= "display : none";
     }
-    console.log(returningVisitor);
+    console.log("returning visitor= " +returningVisitor);
        
     //TO DO : set timer in local storage to count 24 hours :
 //retourning visitor settings:
@@ -174,8 +174,6 @@ mainMap.on("zoom", function(){
 //           console.log(timestampDifference);
 // }
  // !! 86400000 ms (jour), mais live c'est en minute pour test purposes
-
-
 
 
 mainMap.on('click', function (e){
@@ -279,24 +277,29 @@ $.get(
  }); //get
 }
 
-function zoomIn()
-{
-//   let Page = document.getElementById('Body');
-//   Page.style.zoom + 10 +'%'
-//   Page.style.zoom = zoom;
-//   console.log(zoom)
-//   return false;
 
+function zoomObj(){
+let fontSize= 2;
+let zoomSize= mainMap.getZoom();
+
+let zoomOp = fontSize + (zoomSize*2);
+console.log(zoomSize);
+
+ let x= document.getElementsByClassName("thoughtEl");
+
+ for (let i=0; i<x.length; i++){
+    x[i].style.fontSize = zoomOp+"px";
+ }
 }
 
-function zoomOut()
-{
-//   let fontSize= 18;
 
-// fontSize++;
-//   console.log(fontSize);
-//  thoughtEl.style.font-size = fontSize+'px';
-}
+    for (let i=0;i<thoughtsArray.length;i++){
+
+        if (thoughtsArray[i].saved===true){
+            console.log("saveDDddDD");
+        }
+
+        }
 
 
 }); //get
