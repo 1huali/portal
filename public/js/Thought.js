@@ -37,6 +37,9 @@ class Thought {
         //position of the hover over its obj:
         this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
         this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
+        favorite:
+        this.saveButton = L.DomUtil.create("button","favoriteButton${this.thoughtEl.id}",this.map._layers[this.mapLayerArray[0]]._container);
+        console.log(this.saveButton);
       
         // this.favButton = `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`
         this.favButtonArray=[];
@@ -103,7 +106,9 @@ this.yPos = this.point.y;
 
     hover(){    
         //print to div :
-          this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+          // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+                    this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+
           console.log(this.thoughtEl.id)
 
           let favButtonArray = document.getElementsByClassName("hoverButtons");

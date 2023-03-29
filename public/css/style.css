@@ -98,6 +98,24 @@ body{
   text-align: center;
   display: none;
 }
+
+#infos-modal{
+  /* background-color: #ec77ac; */
+    top: 5%;
+    left: 5%;
+
+  text-align: center;
+  display: none;
+}
+
+#savedList-modal{
+  top: 5%;
+  left: 5%;
+
+text-align: center;
+display: none;
+}
+
 /* fractal css */
 .fractal-palette-buttons {
     display: inline-block;

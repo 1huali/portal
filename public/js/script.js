@@ -94,6 +94,7 @@ if (L.Browser.mobile) {
             response[i].icon,));
            }
            
+           //calls the function:
            for (let i=0 ; i< thoughtsArray.length;i++){
             thoughtsArray[i].display();
             thoughtsArray[i].hover();
@@ -158,6 +159,24 @@ mainMap.on('zoomend', function() {
     }
     console.log("returning visitor= " +returningVisitor);
        
+    let infoButton = document.getElementById("info-button");
+    let infoBox = document.getElementById("infos-modal");
+    infoButton.addEventListener("click", function(){
+        infoBox.style= "display : block";
+    });
+    infoBox.addEventListener("click", function(){
+        infoBox.style= "display:none";
+    });
+
+    let savedListButton = document.getElementById("savedList-button");
+    let savedListBox = document.getElementById("savedList-modal")
+
+    savedListButton.addEventListener("click", function(){
+        savedListBox.style= "display : block";
+    });
+    savedListBox.addEventListener("click", function(){
+        savedListBox.style= "display:none";
+    });
 
     //TO DO : set timer in local storage to count 24 hours :
 //retourning visitor settings:
@@ -314,7 +333,29 @@ let zoomOp = fontSize + (zoomSize*2);
     //     console.log("SAVED BIHSOGHOURGH");
     // });
     
+//    //local storage set-up
+//    function saveTimestamp (timestamp){
+//     // Create a local storage item (key value pair)
+//     //The localStorage property is read-only.
+//     //username : password and input fields
+//     timeValue = timestamp;
 
+//     // check if this key-val alreday exists
+//     if (localStorage[userKey] === timeValue) {
+//     //   valToStore = password;
+//     // appendConsoleMsg("> Ur birthday:" + userValue + "time old");
+
+
+//     // } else {
+//     //     //WRITE to local storage
+//     // currentUserIdBox.innerHTML = userValue;
+//     // identifyButton.style = "display : none";
+//     // document.getElementById("password-container").style = "display : block";
+//     // setPasswordButton.style = "display : block";
+//     // localStorage.setItem(userKey,userValue);
+//     }
+//     //!! close dialog
+//     };
 
 }); //get
 }); //end windowOnLoad
