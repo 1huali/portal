@@ -39,7 +39,7 @@ class Thought {
         this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
       
         // this.favButton = `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`
-
+        this.favButtonArray=[];
 //transfered to script :
     //     this.thoughtEl.addEventListener("click", function(){
     //         let thoughtHoverElClass = document.querySelectorAll(".thoughtHoverEl");
@@ -106,22 +106,30 @@ this.yPos = this.point.y;
 
     hover(){    
         //print to div :
-          this.thoughtHoverEl.innerHTML = 
-          this.thought + 
-          " __" + 
-        //   currentAge +  
-        //   "<br>" + 
-          `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`;
+          this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+          console.log(this.thoughtEl.id)
 
-
+          let favButtonArray = document.getElementsByClassName("hoverButtons");
+          console.log(favButtonArray);
     //if favorite button clicked; turn off
-          document.getElementById("favoriteButton"+this.thoughtEl.id).addEventListener('click', function(){
+    for (let i=0; i<favButtonArray.length;i++){
+      favButtonArray[i].addEventListener('click', function(){
+            // this.saveFavorite();
             this.saved=true;
+            console.log(this.saved);
+
         });
+    }
+
 
     }
 
     saveFavorite(){
-      // this.saved=true;
+    //   document.getElementsByClassName("hoverButtons").addEventListener("click", function(){
+        // console.log("SAVED BIHSOGHOURGH");
+    // });
+      this.saved=true;
+                  console.log(this.saved);
+
     }
 }

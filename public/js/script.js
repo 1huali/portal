@@ -97,6 +97,7 @@ if (L.Browser.mobile) {
            for (let i=0 ; i< thoughtsArray.length;i++){
             thoughtsArray[i].display();
             thoughtsArray[i].hover();
+            // console.log(thoughtsArray[i].saved);
            }
 
 mainMap.on('zoomend', function() {
@@ -106,7 +107,6 @@ mainMap.on('zoomend', function() {
         thoughtsArray[i].reprint();
         thoughtsArray[i].display();
         thoughtsArray[i].grow();
-        // thoughtsArray[i].saveFavorite();
     }
     
     zoomObj();
@@ -158,6 +158,7 @@ mainMap.on('zoomend', function() {
     }
     console.log("returning visitor= " +returningVisitor);
        
+
     //TO DO : set timer in local storage to count 24 hours :
 //retourning visitor settings:
 // let creationTimestamp;
@@ -186,6 +187,8 @@ mainMap.on('click', function (e){
     }
 } );
 
+// saveThoughts();
+
 let numPplOnline=0;
   let numPplOnlineBox= document.getElementById("numOnlineRn");
 
@@ -197,7 +200,7 @@ let clientSocket = io_socket.connect('http://localhost:4200');
 //emit a connect message on client side at success: 
 let socketId =-1;
  clientSocket.on('connect', function(data) {
-      console.log("connected");
+      console.log("socket connected");
       // put code here that should only execute once the client is connected
       clientSocket.emit('join', 'msg:: client joined');
       // handler for receiving client id
@@ -219,7 +222,7 @@ let socketId =-1;
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
 function onMapClick(e){
-    console.log("clicked on map");
+    // console.log("clicked on map");
 
     coordinateMarker
     .setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
@@ -277,13 +280,19 @@ $.get(
  }); //get
 }
 
+// for (let i=0;i<newThought.favButtonArray.length;i++){
+//     console.log("SAVED BIHSOGHOURGH");
+
+// }
+// document.getElementsByClassName("hoverButtons").addEventListener("click", function(){
+//     console.log("SAVED BIHSOGHOURGH");
+//     });
 
 function zoomObj(){
 let fontSize= 2;
 let zoomSize= mainMap.getZoom();
 
 let zoomOp = fontSize + (zoomSize*2);
-console.log(zoomSize);
 
  let x= document.getElementsByClassName("thoughtEl");
 
@@ -293,13 +302,18 @@ console.log(zoomSize);
 }
 
 
-    for (let i=0;i<thoughtsArray.length;i++){
+// function saveThoughts(){
+//     for (let i=0;i<thoughtsArray.length;i++){
+//                 // if (thoughtsArray[i].saved===true){
+//             console.log(thoughtsArray[i].saved);
+//                 // }
+//         }
+//     }
 
-        if (thoughtsArray[i].saved===true){
-            console.log("saveDDddDD");
-        }
-
-        }
+    // document.getElementsByClassName("hoverButtons").addEventListener("click", function(){
+    //     console.log("SAVED BIHSOGHOURGH");
+    // });
+    
 
 
 }); //get
