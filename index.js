@@ -49,7 +49,33 @@ async function handleGetVars(request,response){
 
 }
 
+//Updates the Saved from false to true;
+app.get('/thoughtUpdate',saveFavorite);
+async function saveFavorite(request,response){
 
+  console.log("test")
+  console.log(request.query);
+  // response.send("thought updated to favorite! THANKS!");
+
+  //const thought = new thoughtModel();
+  //await thoughtModel.create({ thought: request.query.thought});
+  const filter = { thought : request.query.thought }
+
+  // //prepare for the db:
+  try {
+    let user = await thoughtModel.findOneAndUpdate(filter,{
+      $set: {
+        "saved": request.query.saved,
+      },
+    },{ new: true });
+    console.log(user.saved);
+    response.send("thought updated to favorite! THANKS!");
+    // response.send(user);
+  } catch (error) {
+    response.status(500).send(error);
+  }
+
+}
 //Sockets has 2 parts : socket.io (a server) AND socket.io-client (librairy that loads on client side)
 // declare io which mounts to our httpServer object (runs on top ... )
 let io = require('socket.io')(httpServer);

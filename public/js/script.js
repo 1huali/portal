@@ -158,7 +158,7 @@ mainMap.on('zoomend', function() {
         dailyThoughtBox.style= "display : none";
     }
     console.log("returning visitor= " +returningVisitor);
-       
+//about/infos placeholders : 
     let infoButton = document.getElementById("info-button");
     let infoBox = document.getElementById("infos-modal");
     infoButton.addEventListener("click", function(){
@@ -167,7 +167,7 @@ mainMap.on('zoomend', function() {
     infoBox.addEventListener("click", function(){
         infoBox.style= "display:none";
     });
-
+//favorite placeholders : 
     let savedListButton = document.getElementById("savedList-button");
     let savedListBox = document.getElementById("savedList-modal")
 
@@ -180,10 +180,11 @@ mainMap.on('zoomend', function() {
 
     //TO DO : set timer in local storage to count 24 hours :
 //retourning visitor settings:
-// let creationTimestamp;
-// let currentTimestamp;
-// let timestampDifference;
-// let oneDayTimestamp = 86400000;
+// let creationStamp = 
+// let now = date.getTime() - this.timeStamp;
+// let endStamp = now + 86400000 //24 hours in millisecond
+// let timeLeft;
+// setInterval(function (){now + 24hrs , return timeLeft} , 86400000)
 
 // function ageTimer(){
 //           //calculation of the age of the tree. With the age variable, we can give it an evolution tracking time stamp to assign its visual representation.
@@ -206,7 +207,7 @@ mainMap.on('click', function (e){
     }
 } );
 
-// saveThoughts();
+saveToFavorite(); //where to put it cos it doesnt update
 
 let numPplOnline=0;
   let numPplOnlineBox= document.getElementById("numOnlineRn");
@@ -321,17 +322,15 @@ let zoomOp = fontSize + (zoomSize*2);
 }
 
 
-// function saveThoughts(){
-//     for (let i=0;i<thoughtsArray.length;i++){
-//                 // if (thoughtsArray[i].saved===true){
-//             console.log(thoughtsArray[i].saved);
-//                 // }
-//         }
-//     }
+function saveToFavorite(){
+    for (let i=0;i<thoughtsArray.length;i++){
+                // if (thoughtsArray[i].saved===true){
+            console.log(thoughtsArray[i].saved);
+                // }
+        }
+    }
 
-    // document.getElementsByClassName("hoverButtons").addEventListener("click", function(){
-    //     console.log("SAVED BIHSOGHOURGH");
-    // });
+
     
 //    //local storage set-up
 //    function saveTimestamp (timestamp){

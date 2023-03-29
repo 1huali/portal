@@ -1,8 +1,8 @@
 class Thought {
 
-    constructor(thought,date,map,lat,lng,arrayNumber,icon){
+    constructor(thought,timestamp,map,lat,lng,arrayNumber,icon){
         this.thought= thought;
-        this.date= new Date();
+        this.timestamp= new Date().getTime();
 
         this.map= map;
         //to access the map to have the element div on top of the map
@@ -10,6 +10,7 @@ class Thought {
        // console.log(this.map);
         //creates a div, sets an ID : 
         this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
+        this.arrayNumber=arrayNumber;
         this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
 
         //physical positions:
@@ -21,7 +22,6 @@ class Thought {
         // this.sound="";
         this.icon=icon;
         this.saved=false;
-        this.arrayNumber=arrayNumber;
         //about the growth :
         this.stateArray= [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
         this.stateIndex = 0;
@@ -37,9 +37,7 @@ class Thought {
         //position of the hover over its obj:
         this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
         this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
-        favorite:
-        this.saveButton = L.DomUtil.create("button","favoriteButton${this.thoughtEl.id}",this.map._layers[this.mapLayerArray[0]]._container);
-        console.log(this.saveButton);
+
       
         // this.favButton = `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`
         this.favButtonArray=[];
@@ -109,29 +107,54 @@ this.yPos = this.point.y;
           // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
                     this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
 
-          console.log(this.thoughtEl.id)
+                    let self=this;
+          document.getElementById(`favoriteButton${this.thoughtEl.id}`).addEventListener("click", function(){
+            self.saveFavorite(self);
+          });
 
-          let favButtonArray = document.getElementsByClassName("hoverButtons");
-          console.log(favButtonArray);
-    //if favorite button clicked; turn off
-    for (let i=0; i<favButtonArray.length;i++){
-      favButtonArray[i].addEventListener('click', function(){
-            // this.saveFavorite();
-            this.saved=true;
-            console.log(this.saved);
-
-        });
-    }
 
 
     }
 
-    saveFavorite(){
-    //   document.getElementsByClassName("hoverButtons").addEventListener("click", function(){
-        // console.log("SAVED BIHSOGHOURGH");
-    // });
-      this.saved=true;
-                  console.log(this.saved);
+    saveFavorite(self){
 
+        let thoughtValue=self.thought;
+        //write to local storage
+        localStorage.setItem("savedKey",self.thought);
+        console.log(localStorage.getItem("savedKey"));
+
+        // }
+
+        if (localStorage.thoughts){
+            //check if it exists already:
+            let thoughts= JSON.parse(localStorage.thoughts);
+            console.log(thoughts);
+            thoughts.push(self.thought)
+            localStorage.setItem("thoughts", JSON.stringify(thoughts));
+        }
+            //first time storage:
+        else {
+            let thoughts = [];
+            thoughts[0] = self.thought;
+        localStorage.setItem("thoughts", JSON.stringify(thoughts));
+        } 
+        console.log(localStorage.getItem("thoughts"));
+
+        //update the saved to the db with an ajax GET() request : 
+    // $.get(
+    //     "/thoughtUpdate", //the url page where the response is coming from
+    //     {thought : this.thought, date : this.date, icon: this.icon, xPos : this.xPos, yPos: this.yPos, saved : this.saved, lat : this.n_latLng.lat, lng : this.n_latLng.lng},
+    //    // if we get a response from the server .... 
+    //     function(response) {
+    //        console.log('page content: ' + response);
+    //     }); //get
     }
-}
+
+
+    age(){
+              //age of the tree. With the age variable, we can give it an evolution tracking time stamp to assign its visual representation.
+    //   let date = new Date();
+    //   this.currentAge = date.getTime() - this.timeStamp;
+    }
+
+} //end
