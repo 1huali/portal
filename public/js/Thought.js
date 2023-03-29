@@ -65,9 +65,6 @@ class Thought {
     display(){
 //display randomly new flowers where the pin is at
       //position of the center of the flower canvas :
-
-    
-
       this.thoughtEl.style.left = `${this.xPos-50}px`;
       this.thoughtEl.style.top = `${this.yPos-50}px`; 
 
