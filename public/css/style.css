@@ -167,3 +167,11 @@ display: none;
       font-size:40px;
   }
   }
+
+  .saved-container{
+    width:min-content;
+    margin:2%;
+    font-size:1em;
+    color:#d31d87;
+    padding:1%;
+  }

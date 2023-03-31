@@ -1,8 +1,10 @@
 class Thought {
 
-    constructor(thought,timestamp,map,lat,lng,arrayNumber,icon){
+    constructor(thought,date,map,lat,lng,arrayNumber,icon){
         this.thought= thought;
-        this.timestamp= new Date().getTime();
+        this.date= new Date().getTime();
+        // let timeStampValue=this.timestamp;
+
 
         this.map= map;
         //to access the map to have the element div on top of the map
@@ -118,7 +120,6 @@ this.yPos = this.point.y;
 
     saveFavorite(self){
 
-        let thoughtValue=self.thought;
         //write to local storage
         localStorage.setItem("savedKey",self.thought);
         console.log(localStorage.getItem("savedKey"));
@@ -128,7 +129,6 @@ this.yPos = this.point.y;
         if (localStorage.thoughts){
             //check if it exists already:
             let thoughts= JSON.parse(localStorage.thoughts);
-            console.log(thoughts);
             thoughts.push(self.thought)
             localStorage.setItem("thoughts", JSON.stringify(thoughts));
         }

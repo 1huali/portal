@@ -11,6 +11,7 @@ $(document).ready(function(){
     let savedArray=[];
 
 
+
                //MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
        // We create a leaflet map, and in setView, we determine coordinates and zoom level
 //        let mainMap = L.map('mainMap').setView([45.50884, -73.58781], 19);
@@ -110,6 +111,7 @@ mainMap.on('zoomend', function() {
         thoughtsArray[i].grow();
     }
     
+    checkTimeArrival();
     zoomObj();
 
 });
@@ -141,23 +143,56 @@ mainMap.on('zoomend', function() {
     currentThought = thoughtsArray[thoughtsArray.length-1].thought;
     currentThoughtHTML.innerHTML= currentThought;
 
-    let returningVisitor=false;
+    let generateNewCard=true;
 
-    if (returningVisitor===false){
+    let d = new Date();
+let startTime = d.getTime();
+
+// localStorage.setItem("arrivalTimestamp",timeArrival);
+
+function checkTimeArrival(){
+    let arrivalTimestamp=[];
+    let timer = 30000; //30 seconds for test
+
+if (localStorage.arrivalTimestamp){
+    //check if it exists already. if it does, you need to get it and parse it:
+    arrivalTimestamp = JSON.parse(localStorage.getItem("arrivalTimestamp"));
+    let timePast = parseInt(startTime)-parseInt(arrivalTimestamp[0]);
+
+    if (timePast>timer){
+        console.log("daily timer restarted");
+        generateNewCard=true;
+        arrivalTimestamp[0]=startTime;
+        localStorage.setItem("arrivalTimestamp", JSON.stringify(arrivalTimestamp));
+        
+    } else {
+        console.log("daily card already opened");
+        console.log(dailyThoughtBox.style);
+        dailyThoughtBox.style= "display : none";
+        generateNewCard = false;
+        console.log(dailyThoughtBox.style);
+
+    }
+} else {
+    //first timer, stores the timestamp at arrival:
+    dailyThoughtBox.style= "display : block";
+    console.log("there is no timer stored");
+    generateNewCard = true;
+    arrivalTimestamp.push(startTime);
+    localStorage.setItem("arrivalTimestamp", JSON.stringify(arrivalTimestamp));
+}
+}
+
+if (generateNewCard===true){
     dailyThoughtBox.addEventListener("click", function(){
         dailyThoughtBox.style= "display : none";
         sound.play();
-        returningVisitor = true;
-        //24 hours until the next thought display:
-        //temporary 10 sec
-        setTimeout(() => {
-            returningVisitor=false;
-          }, "10000");
     })
-    } else if (returningVisitor === true){
+    } else if (generateNewCard === false){
+        console.log("hfsjahfkajhs")
         dailyThoughtBox.style= "display : none";
     }
-    console.log("returning visitor= " +returningVisitor);
+
 //about/infos placeholders : 
     let infoButton = document.getElementById("info-button");
     let infoBox = document.getElementById("infos-modal");
@@ -207,7 +242,7 @@ mainMap.on('click', function (e){
     }
 } );
 
-saveToFavorite(); //where to put it cos it doesnt update
+// appendSavedList(); //where to put it cos it doesnt update
 
 let numPplOnline=0;
   let numPplOnlineBox= document.getElementById("numOnlineRn");
@@ -239,6 +274,7 @@ let socketId =-1;
   //global thoughtcount :
   document.getElementById("totalGlobal").innerHTML = thoughtsArray.length;
 
+
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
 function onMapClick(e){
@@ -262,13 +298,14 @@ function onSubmit(e){
     //One submission per day:
                 let thought = inputThought.value;
                 newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
+                localStorage.setItem("timestampKey",newThought.timestamp);
                 thoughtsArray.push(newThought);
+                console.log(localStorage.getItem("timestampKey"));
+
                 //submitting values to db : 
                 passingTheVars(newThought);
                 sound.play();
                 newThought.display();
-                // console.log(newThought);
-                console.log(thoughtsArray);
                 inputThought.value = "";
                 document.getElementById("input-modal").style="display:none";
 
@@ -322,13 +359,22 @@ let zoomOp = fontSize + (zoomSize*2);
 }
 
 
-function saveToFavorite(){
-    for (let i=0;i<thoughtsArray.length;i++){
-                // if (thoughtsArray[i].saved===true){
-            console.log(thoughtsArray[i].saved);
-                // }
-        }
-    }
+
+    savedListButton.addEventListener("click", function(){
+
+        let savedContainer= document.getElementById("savedList-container");
+        //needto parse 
+        let savedThoughtsArray = JSON.parse(localStorage.getItem("thoughts"));
+
+        for (let i=0;i<savedThoughtsArray.length;i++){
+        let dataHTMLElement= document.createElement("p");
+        dataHTMLElement.classList.add("saved-prop");
+        document.getElementById("savedList-modal").appendChild(dataHTMLElement);
+        dataHTMLElement.innerHTML=savedThoughtsArray[i];
+
+    }   
+    });
+
 
 
     
