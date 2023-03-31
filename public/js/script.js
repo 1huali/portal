@@ -6,6 +6,7 @@ prototype 1
 "use strict";
 $(document).ready(function(){
 
+    // localStorage.removeItem("thoughts");
 
     let thoughtsArray=[];
     let savedArray=[];
@@ -86,7 +87,9 @@ if (L.Browser.mobile) {
             // console.log(response);
             //no need to parse the response ; unpack the array of the reponse :
             for(let i = 0; i<response.length; i++){
-           thoughtsArray.push(new Thought(response[i].thought,
+           thoughtsArray.push(new Thought(
+            appendToSaveList,
+            response[i].thought,
             response[i].date,
             mainMap,
             response[i].lat,
@@ -98,7 +101,8 @@ if (L.Browser.mobile) {
            //calls the function:
            for (let i=0 ; i< thoughtsArray.length;i++){
             thoughtsArray[i].display();
-            thoughtsArray[i].hover();
+            thoughtsArray[i].reprint();
+            //thoughtsArray[i].hover();
             // console.log(thoughtsArray[i].saved);
            }
 
@@ -167,10 +171,8 @@ if (localStorage.arrivalTimestamp){
         
     } else {
         console.log("daily card already opened");
-        console.log(dailyThoughtBox.style);
         dailyThoughtBox.style= "display : none";
         generateNewCard = false;
-        console.log(dailyThoughtBox.style);
 
     }
 } else {
@@ -359,8 +361,15 @@ let zoomOp = fontSize + (zoomSize*2);
 }
 
 
-
     savedListButton.addEventListener("click", function(){
+        appendToSaveList();
+    });
+
+    function appendToSaveList(){
+        if(localStorage.thoughts){
+        console.log(localStorage.getItem("thoughts"));
+        document.getElementById("savedList-modal").innerHTML="";
+
 
         let savedContainer= document.getElementById("savedList-container");
         //needto parse 
@@ -371,9 +380,9 @@ let zoomOp = fontSize + (zoomSize*2);
         dataHTMLElement.classList.add("saved-prop");
         document.getElementById("savedList-modal").appendChild(dataHTMLElement);
         dataHTMLElement.innerHTML=savedThoughtsArray[i];
-
+    }
     }   
-    });
+    }
 
 
 

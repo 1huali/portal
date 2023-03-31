@@ -1,6 +1,7 @@
 class Thought {
 
-    constructor(thought,date,map,lat,lng,arrayNumber,icon){
+    constructor(appendToSaveList,thought,date,map,lat,lng,arrayNumber,icon){
+        this.appendToSaveList = appendToSaveList;
         this.thought= thought;
         this.date= new Date().getTime();
         // let timeStampValue=this.timestamp;
@@ -36,6 +37,7 @@ class Thought {
 
         // hover:
         this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
+        
         //position of the hover over its obj:
         this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
         this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
@@ -63,6 +65,7 @@ class Thought {
     //       }
     //         }
     //     });
+    this.hover();
     }
 
     display(){
@@ -105,6 +108,7 @@ this.yPos = this.point.y;
     }
 
     hover(){    
+       
         //print to div :
           // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
                     this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
@@ -112,14 +116,16 @@ this.yPos = this.point.y;
                     let self=this;
           document.getElementById(`favoriteButton${this.thoughtEl.id}`).addEventListener("click", function(){
             self.saveFavorite(self);
+            console.log("clicked")
           });
+         // console.log(document.getElementById(`favoriteButton${this.thoughtEl.id}`));
 
 
 
     }
 
     saveFavorite(self){
-
+        console.log("savies");
         //write to local storage
         localStorage.setItem("savedKey",self.thought);
         console.log(localStorage.getItem("savedKey"));
@@ -140,6 +146,8 @@ this.yPos = this.point.y;
         } 
         console.log(localStorage.getItem("thoughts"));
 
+        self.appendToSaveList();
+        
         //update the saved to the db with an ajax GET() request : 
     // $.get(
     //     "/thoughtUpdate", //the url page where the response is coming from
