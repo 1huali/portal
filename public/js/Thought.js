@@ -1,32 +1,34 @@
 class Thought {
 
-    constructor(appendToSaveList,thought,date,map,lat,lng,arrayNumber,icon){
+    constructor(appendToSaveList,thought,date,map,lat,lng,arrayNumber,city,country){
         this.appendToSaveList = appendToSaveList;
         this.thought= thought;
         this.date= new Date().getTime();
         // let timeStampValue=this.timestamp;
-
+        this.city=city;
+        this.country=country;
 
         this.map= map;
         //to access the map to have the element div on top of the map
         this.mapLayerArray= Object.keys(this.map._layers);
+        console.log(this.map)
        // console.log(this.map);
         //creates a div, sets an ID : 
-        this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
+       //this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
         this.arrayNumber=arrayNumber;
-        this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
+       
 
         //physical positions:
         this.n_latLng = new L.latLng(lat,lng);
+        console.log(this.n_latLng);
         //metaphysical positions:
-        this.point = this.map.latLngToLayerPoint(this.n_latLng);
-        this.xPos = this.point.x;
-        this.yPos = this.point.y;
+       
         // this.sound="";
-        this.icon=icon;
+        // this.icon=icon;
         this.saved=false;
         //about the growth :
-        this.stateArray= [" . "," j "," i "," i꧂","꧁i꧂","꧁✿꧂"];
+        // this.stateArray= [" . "," * ","⋆","⍟","★","☆"];
+        this.stateArray= ["|","|","|","|","|","|"];
         this.stateIndex = 0;
         this.currentText = "NULL";
         this.growingInterval;
@@ -35,12 +37,16 @@ class Thought {
             this.grow();
         }, 1000);
 
+       // this.point = this.map.latLngToLayerPoint(this.n_latLng);
+       // this.xPos = this.point.x;
+       // this.yPos = this.point.y;
+
         // hover:
-        this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
+        // this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
         
-        //position of the hover over its obj:
-        this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
-        this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
+        // //position of the hover over its obj:
+        // this.thoughtHoverEl.style.top = `${this.yPos-150}px`; 
+        // this.thoughtHoverEl.style.left = `${this.xPos-150}px`; 
 
       
         // this.favButton = `<input id="favoriteButton${this.thoughtEl.id}" class="buttons" type="button" value=" ♥ Save "> <br>`
@@ -65,35 +71,34 @@ class Thought {
     //       }
     //         }
     //     });
-    this.hover();
+    // this.hover();
     }
 
-    display(){
-//display randomly new flowers where the pin is at
-      //position of the center of the flower canvas :
-      this.thoughtEl.style.left = `${this.xPos-50}px`;
-      this.thoughtEl.style.top = `${this.yPos-50}px`; 
-
-    //ends the drawing when the growth is completed (so that it doesn't oveerwrites itself)
-    if(this.currentState >=this.stateArray.length){
-      this.growthCompleted=true;
-    }
-
-    }
-//call reprint:
 reprint(){
 //if saved, goes in the favorite array (local storage)
+
 this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
 this.thoughtEl.setAttribute("id","thought"+this.arrayNumber);
+
+
+
+this.point = this.map.latLngToLayerPoint(this.n_latLng);
 this.xPos = this.point.x;
 this.yPos = this.point.y;
+
+this.thoughtEl.style.left = `${this.xPos}px`;
+this.thoughtEl.style.top = `${this.yPos}px`;
         // hover:
         this.thoughtHoverEl = L.DomUtil.create("div","thoughtHoverEl",this.map._layers[this.mapLayerArray[0]]._container);
         //position of the hover over its obj:
-        this.thoughtHoverEl.style.top = `${this.yPos-70}px`; 
-        this.thoughtHoverEl.style.left = `${this.xPos-70}px`; 
+        this.thoughtHoverEl.style.top = `${this.yPos-20}px`; 
+        this.thoughtHoverEl.style.left = `${this.xPos-20}px`; 
 
         this.hover();
+
+        if(this.currentState >=this.stateArray.length){
+            this.growthCompleted=true;
+          }
 
     }
 
@@ -111,12 +116,20 @@ this.yPos = this.point.y;
        
         //print to div :
           // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
-                    this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+                    // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+                    this.thoughtHoverEl.innerHTML = this.thought + " __" + `<div id="favoriteButton${this.thoughtEl.id}" class="hoverButtons">[ ★ ]</div>`;
+                    // document.getElementById("thoughtHoverEl").style="color:white";
 
                     let self=this;
           document.getElementById(`favoriteButton${this.thoughtEl.id}`).addEventListener("click", function(){
+            //saves thought to favorite by checking thru the db :
+            //changes color of the button to white :
+            document.getElementById(`favoriteButton${self.thoughtEl.id}`).style="color:white";
+            // document.getElementById("thoughtHoverEl").style = "color:white";
+
+            self.saved = true;
+            console.log(self.saved);
             self.saveFavorite(self);
-            console.log("clicked")
           });
          // console.log(document.getElementById(`favoriteButton${this.thoughtEl.id}`));
 
@@ -125,13 +138,12 @@ this.yPos = this.point.y;
     }
 
     saveFavorite(self){
-        console.log("savies");
         //write to local storage
         localStorage.setItem("savedKey",self.thought);
         console.log(localStorage.getItem("savedKey"));
 
         // }
-
+//if the thought doesn't exist as "saved" in the db, it will created it
         if (localStorage.thoughts){
             //check if it exists already:
             let thoughts= JSON.parse(localStorage.thoughts);
@@ -147,7 +159,7 @@ this.yPos = this.point.y;
         console.log(localStorage.getItem("thoughts"));
 
         self.appendToSaveList();
-        
+
         //update the saved to the db with an ajax GET() request : 
     // $.get(
     //     "/thoughtUpdate", //the url page where the response is coming from

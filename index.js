@@ -1,10 +1,11 @@
 let express = require('express');
 const mongoose = require("mongoose");
-const portNumber=4200;
+const portNumber=5000;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
 
 const thoughtModel = require("./models");
+const { disconnect } = require('process');
 
 httpServer.listen(portNumber, function (){
     console.log("server running on port"+portNumber);
@@ -41,7 +42,7 @@ async function handleGetVars(request,response){
   const thought = new thoughtModel(request.query);
   //prepare for the db:
   try {
-    await thought.save();
+  let user = await thought.save();
     response.send(user);
   } catch (error) {
     response.status(500).send(error);
@@ -89,6 +90,7 @@ let clientIds =[];
 
 //SERVER SETUP (io listens for the connection event for incoming sockets, and if one is connected):
 //will log it to the console....
+//the clientIdIncrementing is incrementing at the opening of link:
 io.on('connect', function(socket){
     console.log("original id:: "+ socket.id);
     socket.on('join', function (data) {
@@ -99,9 +101,16 @@ io.on('connect', function(socket){
      //keep track of the ids
      clientIds.push({id:clientIdIncrementing,socketId:socket.id});
      //to broadcast emit the number of client (label(numClient), value)
-     io.emit("numClients", clientIds.length);
+     io.emit("numClients", clientIdIncrementing);
 
   });
+//the clientIdIncrementing is diminishing at the break of link:
+  socket.on('disconnect', function(data){
+    console.log("disconnected");
+    clientIdIncrementing--;
+    //broadcast the upadte:
+    io.emit("numClients", clientIdIncrementing);
+  })
 
   });
 

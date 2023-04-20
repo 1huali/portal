@@ -7,49 +7,37 @@ prototype 1
 $(document).ready(function(){
 
     // localStorage.removeItem("thoughts");
+    // localStorage.removeItem("arrivalTimestamp");
+
 
     let thoughtsArray=[];
     let savedArray=[];
+    let generateNewCard=true;
+    let arrivalTimestamp=[];
+    let d = new Date();
+let startTime = d.getTime();
+// temporary:
+setTimeout(() => {
+    document.getElementById("userOptionDiv").style="display:block";
+    document.getElementById("multiplayerDataZone").style="display:block";
 
+}, "2500");
 
-
-               //MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
-       // We create a leaflet map, and in setView, we determine coordinates and zoom level
-//        let mainMap = L.map('mainMap').setView([45.50884, -73.58781], 19);
-//        let coordinateMarker = L.marker();
-//               mainMap.touchZoom.disable();
-//        mainMap.doubleClickZoom.disable();
-//        mainMap.scrollWheelZoom.disable();
-//        //source : https://mathi330.github.io/cart351/Demo/demo.html
-//     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//         maxZoom: 9, // you cannot zoom in more than 9, if set to 10, the map turns gray
-//         // doubleClickZoom: false, // this is just so when I double click on the map it doesn't zoom in
-//         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="blank_">OpenStreetMap</a>' // link to where we got the data for the map
-//     }).addTo(mainMap); // add tile layer to map
-
-// //custom tiles : https://leafletjs.com/examples/extending/extending-2-layers.html
-// L.TileLayer.Kitten = L.TileLayer.extend({
-//     getTileUrl: function(coords) {
-//         // let i = Math.ceil( Math.random() * 3 );
-//         return "assets/bg_noir.jpg";
-//     },
-//     getAttribution: function() {
-//         return "<a href='https://placekitten.com/attribution.html'>Void</a>"
-//     }
-// });
-// L.tileLayer.kitten = function() {
-//     return new L.TileLayer.Kitten();
-// }
-// L.tileLayer.kitten().addTo(mainMap);
-
-            //FRACTAL MAP SETUP ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
+               //FRACTAL MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 // http://aparshin.github.io/leaflet-fractal/#julia_1.1184848480.273636364i/1/5/15
+
+let geocoder = new google.maps.Geocoder();
 
 //default zoom : 10
 let mainMap = L.map('mainMap', {minZoom:1});
 let coordinateMarker = L.marker();
+let geolocationCity;
+let geolocationCountry;
+let geoOn=false;
 
 let numWorkers = 3;
+let marker =null;
+let coords = null;
 
 let layers = {
     "julia -1.118484848+0.273636364*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",300,-1.118484848,0.273636364).addTo(mainMap),
@@ -67,9 +55,8 @@ let layers = {
     //  "julia  -0.37+0.6*i":L.tileLayer.fractalLayer(paletteController, numWorkers,"julia",500,-0.37,0.6)
 }
 
-let lc=L.control.layers(layers,{},{position:"topleft",collapsed:false}).addTo(mainMap);
-
-mainMap.setView([0, -90], 1).addHash({lc:lc}).addControl(new PaletteControl(layers, {position: "topleft"}));
+let lc=L.control.layers(layers,{},{position:"bottomright",collapsed:false}).addTo(mainMap);
+mainMap.setView([0, -90], 1).addHash({lc:lc}).addControl(new PaletteControl(layers, {position: "bottomright"}));
 // mainMap.setZoom(1);
 
 if (L.Browser.mobile) {
@@ -87,36 +74,70 @@ if (L.Browser.mobile) {
             // console.log(response);
             //no need to parse the response ; unpack the array of the reponse :
             for(let i = 0; i<response.length; i++){
-           thoughtsArray.push(new Thought(
+           let newThought = new Thought(
             appendToSaveList,
             response[i].thought,
             response[i].date,
             mainMap,
-            response[i].lat,
-            response[i].lng,
+            parseFloat(response[i].lat),
+            parseFloat(response[i].lng),
             i,
-            response[i].icon,));
+            response[i].city,
+            response[i].country);
+            // newThought.xPos =  parseInt(response[i].xPos);
+            // newThought.yPos =  parseInt(response[i].yPos);
+
+            thoughtsArray.push(newThought);
+           
+         
+            
            }
+
            
            //calls the function:
            for (let i=0 ; i< thoughtsArray.length;i++){
-            thoughtsArray[i].display();
-            thoughtsArray[i].reprint();
+          //  thoughtsArray[i].display();
+          thoughtsArray[i].reprint();
+         
             //thoughtsArray[i].hover();
             // console.log(thoughtsArray[i].saved);
            }
 
+           //reprint on the map functions:
 mainMap.on('zoomend', function() {
 
     for (let i=0;i< thoughtsArray.length; i++){
         //reprint at every zoom : 
         thoughtsArray[i].reprint();
-        thoughtsArray[i].display();
         thoughtsArray[i].grow();
     }
     
     checkTimeArrival();
     zoomObj();
+    // onMapClick()
+    if(marker!==null){
+    marker.addTo(mainMap); // add the marker to the map
+}
+
+
+});
+
+           //reprint on the map functions:
+mainMap.on('moveend', function() {
+
+    for (let i=0;i< thoughtsArray.length; i++){
+        //reprint at every zoom : 
+        thoughtsArray[i].reprint();
+        thoughtsArray[i].grow();
+    }
+    
+    checkTimeArrival();
+    zoomObj();
+    // onMapClick()
+    if(marker!==null){
+    marker.addTo(mainMap); // add the marker to the map
+}
+
 
 });
 
@@ -126,7 +147,7 @@ mainMap.on('zoomend', function() {
     let totalGlobalBox = document.getElementById("totalGlobal");
     let totalGlobalCount= 0;
     let totalLocalCount= 0;
-    totalSoloBox.innerHTML=totalLocalCount;
+    // totalSoloBox.innerHTML=totalLocalCount;
     totalGlobalBox.innerHTML=totalGlobalCount;
 
     let submitButton= document.getElementById("submitButton");
@@ -144,18 +165,20 @@ mainMap.on('zoomend', function() {
     let currentThoughtHTML= document.getElementById("currentThought");
     //Queue settings:
     let currentThought="";
-    currentThought = thoughtsArray[thoughtsArray.length-1].thought;
-    currentThoughtHTML.innerHTML= currentThought;
+    if (thoughtsArray.length>0){
+        currentThought = thoughtsArray[thoughtsArray.length-1].thought;
+        currentThoughtHTML.innerHTML= currentThought;    
+    };
 
-    let generateNewCard=true;
+    let addThoughtButton= document.getElementById("addThought-button");
+    addThoughtButton.addEventListener("click", function(){
+        document.getElementById("input-modal").style="display:block";
+    })
 
-    let d = new Date();
-let startTime = d.getTime();
 
 // localStorage.setItem("arrivalTimestamp",timeArrival);
 
 function checkTimeArrival(){
-    let arrivalTimestamp=[];
     let timer = 30000; //30 seconds for test
 
 if (localStorage.arrivalTimestamp){
@@ -198,6 +221,7 @@ if (generateNewCard===true){
 //about/infos placeholders : 
     let infoButton = document.getElementById("info-button");
     let infoBox = document.getElementById("infos-modal");
+    infoBox.style="display:none"
     infoButton.addEventListener("click", function(){
         infoBox.style= "display : block";
     });
@@ -206,7 +230,9 @@ if (generateNewCard===true){
     });
 //favorite placeholders : 
     let savedListButton = document.getElementById("savedList-button");
-    let savedListBox = document.getElementById("savedList-modal")
+
+    let savedListBox = document.getElementById("savedList-modal");
+    savedListBox.style="display:none";
 
     savedListButton.addEventListener("click", function(){
         savedListBox.style= "display : block";
@@ -233,13 +259,15 @@ if (generateNewCard===true){
 // }
  // !! 86400000 ms (jour), mais live c'est en minute pour test purposes
 
+ let inputModal= document.getElementById("input-modal");
+ inputModal.style="display:none"
 
 mainMap.on('click', function (e){
     if (submitOff === false){
         onMapClick(e);
 
     } else if (submitOff === true){
-        document.getElementById("input-modal").style="display:none";
+        inputModal.style="display:none";
         console.log("come back tmr");
     }
 } );
@@ -252,7 +280,7 @@ let numPplOnline=0;
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 //set up the client socket to connect to the socket.io server
 let io_socket = io();
-let clientSocket = io_socket.connect('http://localhost:4200');
+let clientSocket = io_socket.connect('http://localhost:5000');
 
 //emit a connect message on client side at success: 
 let socketId =-1;
@@ -260,16 +288,21 @@ let socketId =-1;
       console.log("socket connected");
       // put code here that should only execute once the client is connected
       clientSocket.emit('join', 'msg:: client joined');
-      // handler for receiving client id
+
+      // handler for receiving client id/callback function:
       clientSocket.on("joinedClientId", function(data){
         socketId = data;
         console.log("myId : "+socketId);
+        // runClientInConnect(); //AJOUTÉ
+    
       });
 
+      
+      //prints the num of people online rn:
       clientSocket.on("numClients", function(data){
         numPplOnline = data;
         numPplOnlineBox.innerHTML= numPplOnline;
-//
+
       })
   });
 
@@ -280,34 +313,37 @@ let socketId =-1;
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
 function onMapClick(e){
-    // console.log("clicked on map");
 
-    coordinateMarker
-    .setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
-    .addTo(mainMap); // add the marker to the map
-    locationDataBox.value = e.latlng;
-
-    onSubmit(e);
-    document.getElementById("input-modal").style="display:block";
+    marker = coordinateMarker.setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
+    marker.addTo(mainMap); // add the marker to the map
+    // locationDataBox.value = e.latlng; //prints metaphysical coordinates in value location box
+    coords = e.latlng;
+    
+    addThoughtButton.style="display:block";
     // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
 
 }
 
-function onSubmit(e){
  //user can submit one thought per day:
  submitButton.addEventListener("click", function(){
+    
+    console.log("called submit");
+  
     submitOff=true;
     //One submission per day:
+    console.log(coords);
                 let thought = inputThought.value;
-                newThought = new Thought(thought, date, mainMap, e.latlng.lat, e.latlng.lng ,thoughtsArray.length, icon.value);
-                localStorage.setItem("timestampKey",newThought.timestamp);
+                newThought = new Thought(appendToSaveList, thought, date, mainMap, coords.lat, coords.lng ,thoughtsArray.length,geolocationCity,geolocationCountry);
+                newThought.reprint();
+                localStorage.setItem("timestampKey",newThought.date);
                 thoughtsArray.push(newThought);
                 console.log(localStorage.getItem("timestampKey"));
 
                 //submitting values to db : 
                 passingTheVars(newThought);
                 sound.play();
-                newThought.display();
+               
+                
                 inputThought.value = "";
                 document.getElementById("input-modal").style="display:none";
 
@@ -324,7 +360,7 @@ function onSubmit(e){
     
         });
     
-}
+//}
 
 
 //pass inputs to db  :
@@ -332,7 +368,7 @@ function passingTheVars(newThought){
     //ajax GET() request : 
 $.get(
  "/thoughtSubmit", //the url page where the response is coming from
- {thought : newThought.thought, date : newThought.date, icon: newThought.icon, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng},
+ {thought : newThought.thought, date : newThought.date, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng, city : newThought.city, country:newThought.country},
 // if we get a response from the server .... 
  function(response) {
     console.log('page content: ' + response);
@@ -365,21 +401,24 @@ let zoomOp = fontSize + (zoomSize*2);
         appendToSaveList();
     });
 
+    //appends to the save list
     function appendToSaveList(){
         if(localStorage.thoughts){
         console.log(localStorage.getItem("thoughts"));
-        document.getElementById("savedList-modal").innerHTML="";
+        document.getElementById("savedElements").innerHTML="";
 
-
-        let savedContainer= document.getElementById("savedList-container");
+        let savedContainer= document.getElementById("savedList-modal");
         //needto parse 
         let savedThoughtsArray = JSON.parse(localStorage.getItem("thoughts"));
+        
 
         for (let i=0;i<savedThoughtsArray.length;i++){
         let dataHTMLElement= document.createElement("p");
         dataHTMLElement.classList.add("saved-prop");
-        document.getElementById("savedList-modal").appendChild(dataHTMLElement);
+        document.getElementById("savedElements").appendChild(dataHTMLElement);
+        //!! STORE GELOCATION
         dataHTMLElement.innerHTML=savedThoughtsArray[i];
+        // dataHTMLElement.innerHTML=savedThoughtsArray[i]+". "+geolocationCountry[i]+", "+geolocationCity[i]+".";
     }
     }   
     }
@@ -410,6 +449,73 @@ let zoomOp = fontSize + (zoomSize*2);
 //     }
 //     //!! close dialog
 //     };
+
+let geoLocationDetected=false;
+document.getElementById("authorizeLocation").addEventListener("click",() =>{
+
+    if (geoLocationDetected===false){
+
+    if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(usePosition);
+          geoOn = true;
+          document.getElementById("authorizeLocation").value = "Off"
+    }      else {
+        console.log( "Geolocation is not supported by this browser.");
+    }
+    geoLocationDetected=true;
+} else {
+      if (geoOn === true){
+        document.getElementById("authorizeLocation").value = "Off"
+        geoOn = false;
+    } else {
+        document.getElementById("authorizeLocation").value = "On"
+        geoOn = true;
+    }
+      }
+  });
+
+ // THE CALLBACK FUNCTION for geolocation position:
+    function usePosition(position) {
+    // console.log(position);
+    let geocoder = new google.maps.Geocoder();
+    let latlng = {
+        lat: parseFloat(position.coords.latitude),
+        lng: parseFloat(position.coords.longitude),
+      };
+    
+ 
+    // let paraLat = document.createElement("p");
+    // paraLat.textContent = "Latitude: " + position.coords.latitude;
+ 
+    // let paraLong = document.createElement("p");
+    // paraLong.textContent = "Longitude: " + position.coords.longitude;
+ 
+    // // console.log(position.coords);
+    // document.getElementById("coords").appendChild(paraLat);
+    // document.getElementById("coords").appendChild(paraLong);
+
+    geocoder
+.geocode({ location: latlng })
+.then((response) => {
+// geolocationResponse = response.results[0].plus_code.compound_code;
+for (let i=0; i<response.results[0].address_components.length;i++) {
+
+    if (response.results[0].address_components[i].types[0] === "locality"){
+        geolocationCity = response.results[0].address_components[i].long_name;
+    }
+    if (response.results[0].address_components[i].types[0] === "country"){
+        geolocationCountry = response.results[0].address_components[i].long_name;
+        break;
+    }
+}
+
+locationDataBox.innerHTML = geolocationCity+ " , "+ geolocationCountry+".";
+
+
+});
+ 
+}//function usePosition
+
 
 }); //get
 }); //end windowOnLoad

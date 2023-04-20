@@ -10,10 +10,6 @@ const ThoughtSchema = new mongoose.Schema({
     type: String,
   
   },
-  icon: {
-    type: String,
-    
-  },
   xPos: {
     type: String,
    
@@ -31,6 +27,12 @@ const ThoughtSchema = new mongoose.Schema({
     
   },
   lng: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  country: {
     type: String,
   },
 });
