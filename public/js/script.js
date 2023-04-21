@@ -271,10 +271,8 @@ if (generateNewCard===true){
  inputModal.style="display:none"
 
 mainMap.on('click', function (e){
-    if (submitOff === false){
+    if (submitOff === false && clickEnabled === true){
         onMapClick(e);
-        console.log("need to click add th9ught")
-
     } else if (submitOff === true){
         inputModal.style="display:none";
         console.log("come back tmr");
@@ -323,26 +321,20 @@ let socketId =-1;
 
 function onMapClick(e){
 
-    if (clickEnabled === true){
- 
     marker = coordinateMarker.setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
     marker.addTo(mainMap); // add the marker to the map
     coords = e.latlng;
     document.getElementById("instruction-modal").style="display:none";
     document.getElementById("input-modal").style="display:block";
-              
-    }
-    // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
+
 }
 
  //user can submit one thought per day:
  submitButton.addEventListener("click", function(){
-    
-    console.log("called submit");
-  
+      
     submitOff=true;
     //One submission per day:
-    console.log(coords);
+    // console.log(coords);
                 let thought = inputThought.value;
                 newThought = new Thought(appendToSaveList, thought, date, mainMap, coords.lat, coords.lng ,thoughtsArray.length,geolocationCity,geolocationCountry);
                 newThought.reprint();
@@ -382,6 +374,13 @@ $.get(
  {thought : newThought.thought, date : newThought.date, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng, city : newThought.city, country:newThought.country},
 // if we get a response from the server .... 
  function(response) {
+    //removes the marker at thought submission:
+    clickEnabled=false;
+    console.log(marker);
+    inputBoxOpen=false;
+    mainMap.removeLayer(marker);
+    marker = null;
+
     console.log('page content: ' + response);
  }); //get
 }

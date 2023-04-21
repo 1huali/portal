@@ -11,7 +11,6 @@ class Thought {
         this.map= map;
         //to access the map to have the element div on top of the map
         this.mapLayerArray= Object.keys(this.map._layers);
-        console.log(this.map)
        // console.log(this.map);
         //creates a div, sets an ID : 
        //this.thoughtEl= L.DomUtil.create("div","thoughtEl",this.map._layers[this.mapLayerArray[0]]._container);
@@ -20,7 +19,6 @@ class Thought {
 
         //physical positions:
         this.n_latLng = new L.latLng(lat,lng);
-        console.log(this.n_latLng);
         //metaphysical positions:
        
         // this.sound="";
