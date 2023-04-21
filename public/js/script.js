@@ -114,7 +114,6 @@ mainMap.on('zoomend', function() {
     
     checkTimeArrival();
     zoomObj();
-    // onMapClick()
     if(marker!==null){
     marker.addTo(mainMap); // add the marker to the map
 }
@@ -133,7 +132,6 @@ mainMap.on('moveend', function() {
     
     checkTimeArrival();
     zoomObj();
-    // onMapClick()
     if(marker!==null){
     marker.addTo(mainMap); // add the marker to the map
 }
@@ -170,9 +168,19 @@ mainMap.on('moveend', function() {
         currentThoughtHTML.innerHTML= currentThought;    
     };
 
+    //Button to display thought fieldbox:
     let addThoughtButton= document.getElementById("addThought-button");
+    let clickEnabled=false;
+    let inputBoxOpen=false;
+
     addThoughtButton.addEventListener("click", function(){
-        document.getElementById("input-modal").style="display:block";
+        //enables marker on map : 
+        if (inputBoxOpen===false){
+        inputBoxOpen=true;
+        clickEnabled =true;
+        document.getElementById("instruction-modal").style="display:block";
+        // document.getElementById("input-modal").style="display:block";
+        }
     })
 
 
@@ -265,6 +273,7 @@ if (generateNewCard===true){
 mainMap.on('click', function (e){
     if (submitOff === false){
         onMapClick(e);
+        console.log("need to click add th9ught")
 
     } else if (submitOff === true){
         inputModal.style="display:none";
@@ -314,14 +323,16 @@ let socketId =-1;
 
 function onMapClick(e){
 
+    if (clickEnabled === true){
+ 
     marker = coordinateMarker.setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
     marker.addTo(mainMap); // add the marker to the map
-    // locationDataBox.value = e.latlng; //prints metaphysical coordinates in value location box
     coords = e.latlng;
-    
-    addThoughtButton.style="display:block";
+    document.getElementById("instruction-modal").style="display:none";
+    document.getElementById("input-modal").style="display:block";
+              
+    }
     // thoughtsArray.push(new Thought(inputThought,lat,lng,sound,) ),
-
 }
 
  //user can submit one thought per day:
