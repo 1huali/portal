@@ -92,6 +92,7 @@ this.thoughtEl.style.top = `${this.yPos}px`;
         this.thoughtHoverEl.style.top = `${this.yPos-20}px`; 
         this.thoughtHoverEl.style.left = `${this.xPos-20}px`; 
 
+
         this.hover();
 
         if(this.currentState >=this.stateArray.length){
@@ -113,20 +114,28 @@ this.thoughtEl.style.top = `${this.yPos}px`;
     hover(){    
        
         //print to div :
-          // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
+        //    this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
                     // this.thoughtHoverEl.innerHTML = this.thought + " __" + `<input id="favoriteButton${this.thoughtEl.id}" class="hoverButtons" type="button" value=" ♥ Save "> <br>`;
-                    this.thoughtHoverEl.innerHTML = this.thought + " __" + `<div id="favoriteButton${this.thoughtEl.id}" class="hoverButtons">[ ★ ]</div>`;
+                    this.thoughtHoverEl.innerHTML = this.thought + " __";
+                    let div= document.createElement("div");
+                    div.id=`favoriteButton${this.thoughtEl.id}`;
+                    div.classList.add("hoverButtons");
+                    div.innerHTML="[☆]";
+                    this.thoughtHoverEl.appendChild(div);
                     // document.getElementById("thoughtHoverEl").style="color:white";
 
                     let self=this;
-          document.getElementById(`favoriteButton${this.thoughtEl.id}`).addEventListener("click", function(){
+          div.addEventListener("click", function(){
             //saves thought to favorite by checking thru the db :
             //changes color of the button to white :
-            document.getElementById(`favoriteButton${self.thoughtEl.id}`).style="color:white";
+            this.style="color:white";
+            this.innerHTML="[★]";
+
             // document.getElementById("thoughtHoverEl").style = "color:white";
+            console.log("clcincncnc");
 
             self.saved = true;
-            console.log(self.saved);
+            // console.log(self.saved);
             self.saveFavorite(self);
           });
          // console.log(document.getElementById(`favoriteButton${this.thoughtEl.id}`));
@@ -145,7 +154,7 @@ this.thoughtEl.style.top = `${this.yPos}px`;
         if (localStorage.thoughts){
             //check if it exists already:
             let thoughts= JSON.parse(localStorage.thoughts);
-            thoughts.push(self.thought)
+            thoughts.push(self.thought+". "+self.city+", "+self.country+". ");
             localStorage.setItem("thoughts", JSON.stringify(thoughts));
         }
             //first time storage:
@@ -157,6 +166,8 @@ this.thoughtEl.style.top = `${this.yPos}px`;
         console.log(localStorage.getItem("thoughts"));
 
         self.appendToSaveList();
+
+        
 
         //update the saved to the db with an ajax GET() request : 
     // $.get(

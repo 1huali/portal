@@ -31,8 +31,8 @@ let geocoder = new google.maps.Geocoder();
 //default zoom : 10
 let mainMap = L.map('mainMap', {minZoom:1});
 let coordinateMarker = L.marker();
-let geolocationCity;
-let geolocationCountry;
+let geolocationCity="unknown";
+let geolocationCountry="unknown";
 let geoOn=false;
 
 let numWorkers = 3;
@@ -427,11 +427,17 @@ let zoomOp = fontSize + (zoomSize*2);
         dataHTMLElement.classList.add("saved-prop");
         document.getElementById("savedElements").appendChild(dataHTMLElement);
         //!! STORE GELOCATION
-        dataHTMLElement.innerHTML=savedThoughtsArray[i];
-        // dataHTMLElement.innerHTML=savedThoughtsArray[i]+". "+geolocationCountry[i]+", "+geolocationCity[i]+".";
+        // dataHTMLElement.innerHTML=savedThoughtsArray[i];
+        console.log(savedThoughtsArray);
+        dataHTMLElement.innerHTML= savedThoughtsArray[i];
     }
     }   
     }
+
+    document.getElementById("clearList-button").addEventListener("click", function(){
+    console.log('clikKRLKANFJA');
+    });
+
 
 
 
