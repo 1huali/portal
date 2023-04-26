@@ -1,8 +1,10 @@
 let express = require('express');
 const mongoose = require("mongoose");
-const portNumber=5000;
+// const portNumber=5000;
+const portNumber= process.env.PORT||5000;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
+require('dotenv').config(); // enables the node librairy dotenv, that is used to enbale the .env file to be read (which stores the connection string to mongo)
 
 const thoughtModel = require("./models");
 const { disconnect } = require('process');
@@ -15,8 +17,8 @@ httpServer.listen(portNumber, function (){
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.json());
-// the connection string to the db:
-mongoose.connect('mongodb+srv://1huali:m351U1TQu1RmFYnl@portal.djy0yyy.mongodb.net/portal?retryWrites=true&w=majority');
+// the mongo connection string (to the db) from the .env file:
+mongoose.connect(process.env.MONGODB_URI);
 //the connection is stored in  variable "db" :
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));

@@ -6,7 +6,6 @@ prototype 1
 "use strict";
 $(document).ready(function(){
 
-    // localStorage.removeItem("thoughts");
     // localStorage.removeItem("arrivalTimestamp");
 
 
@@ -110,6 +109,7 @@ mainMap.on('zoomend', function() {
         //reprint at every zoom : 
         thoughtsArray[i].reprint();
         thoughtsArray[i].grow();
+        thoughtsArray[i].hover(); //??THEY REPRINT IN WHITE 
     }
     
     checkTimeArrival();
@@ -128,6 +128,8 @@ mainMap.on('moveend', function() {
         //reprint at every zoom : 
         thoughtsArray[i].reprint();
         thoughtsArray[i].grow();
+        thoughtsArray[i].hover(); //??THEY REPRINT IN WHITE 
+
     }
     
     checkTimeArrival();
@@ -243,9 +245,12 @@ if (generateNewCard===true){
     savedListBox.style="display:none";
 
     savedListButton.addEventListener("click", function(){
+        for (let i=0;i<thoughtsArray.length;i++){
+            console.log(thoughtsArray[i].saved);
+        }
         savedListBox.style= "display : block";
     });
-    savedListBox.addEventListener("click", function(){
+    document.getElementById("savedElements").addEventListener("click", function(){
         savedListBox.style= "display:none";
     });
 
@@ -287,7 +292,8 @@ let numPplOnline=0;
            //SOCKET SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 //set up the client socket to connect to the socket.io server
 let io_socket = io();
-let clientSocket = io_socket.connect('http://localhost:5000');
+// let clientSocket = io_socket.connect('http://localhost:5000'); //no need cos its connected automatically
+let clientSocket = io_socket.connect();
 
 //emit a connect message on client side at success: 
 let socketId =-1;
@@ -431,17 +437,21 @@ let zoomOp = fontSize + (zoomSize*2);
         console.log(savedThoughtsArray);
         dataHTMLElement.innerHTML= savedThoughtsArray[i];
     }
-    }   
     }
 
-    document.getElementById("clearList-button").addEventListener("click", function(){
-    console.log('clikKRLKANFJA');
-    });
+    }
 
+//Clear local storage and saved list : 
+document.getElementById("clearList-button").addEventListener("click", function(){
+    localStorage.removeItem("thoughts");
+    for (let i=0;i<thoughtsArray.length;i++){
+        thoughtsArray[i].saved=false;
+        console.log(thoughtsArray[i].saved);
+        //??doesnt update to false?
+        //?? doesn't erase at clearance
+    }
+});
 
-
-
-    
 //    //local storage set-up
 //    function saveTimestamp (timestamp){
 //     // Create a local storage item (key value pair)

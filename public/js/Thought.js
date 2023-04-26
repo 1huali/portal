@@ -135,7 +135,6 @@ this.thoughtEl.style.top = `${this.yPos}px`;
             console.log("clcincncnc");
 
             self.saved = true;
-            // console.log(self.saved);
             self.saveFavorite(self);
           });
          // console.log(document.getElementById(`favoriteButton${this.thoughtEl.id}`));
@@ -147,7 +146,7 @@ this.thoughtEl.style.top = `${this.yPos}px`;
     saveFavorite(self){
         //write to local storage
         localStorage.setItem("savedKey",self.thought);
-        console.log(localStorage.getItem("savedKey"));
+        // console.log(localStorage.getItem("savedKey"));
 
         // }
 //if the thought doesn't exist as "saved" in the db, it will created it
@@ -167,7 +166,7 @@ this.thoughtEl.style.top = `${this.yPos}px`;
 
         self.appendToSaveList();
 
-        
+
 
         //update the saved to the db with an ajax GET() request : 
     // $.get(
