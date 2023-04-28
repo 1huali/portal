@@ -39,7 +39,7 @@ var paletteController = {
             return rgb;
         },
         'green': function(colorIndex) {
-            return [Math.floor(colorIndex * 255), 0, 0, 255]
+            return [Math.floor(colorIndex * 255), (colorIndex * 100), 0, 255]
         // },
         // 'candy': function(colorIndex) {
         //     var i = Math.floor(colorIndex * 360) % 5

@@ -10,7 +10,6 @@ $(document).ready(function(){
 
 
     let thoughtsArray=[];
-    let savedArray=[];
     let generateNewCard=true;
     let arrivalTimestamp=[];
     let d = new Date();
@@ -22,6 +21,14 @@ setTimeout(() => {
 
 }, "2500");
 
+let flareIcon = L.icon({
+    iconUrl: 'public/assets/images/flare.png',
+
+    iconSize:     [38, 95]// size of the icon
+    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
                //FRACTAL MAP SETTING ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 // http://aparshin.github.io/leaflet-fractal/#julia_1.1184848480.273636364i/1/5/15
 
@@ -29,7 +36,7 @@ let geocoder = new google.maps.Geocoder();
 
 //default zoom : 10
 let mainMap = L.map('mainMap', {minZoom:1});
-let coordinateMarker = L.marker();
+let coordinateMarker = L.marker({icon: flareIcon});
 let geolocationCity="unknown";
 let geolocationCountry="unknown";
 let geoOn=false;
@@ -74,6 +81,7 @@ if (L.Browser.mobile) {
             //no need to parse the response ; unpack the array of the reponse :
             for(let i = 0; i<response.length; i++){
            let newThought = new Thought(
+            response[i]._id,
             appendToSaveList,
             response[i].thought,
             response[i].date,
@@ -87,15 +95,19 @@ if (L.Browser.mobile) {
             // newThought.yPos =  parseInt(response[i].yPos);
 
             thoughtsArray.push(newThought);
-           
-         
-            
            }
 
+           //checks the thoughts that are according to the savedId array list and puts them back to true:
+           let savedIds= JSON.parse(localStorage.savedIds)
+           for (let i=0;i<thoughtsArray.length;i++){
+            if (savedIds.includes(thoughtsArray[i].thoughtId)){
+                thoughtsArray[i].saved=true;
+            }
+           }
            
            //calls the function:
            for (let i=0 ; i< thoughtsArray.length;i++){
-          //  thoughtsArray[i].display();
+        //    thoughtsArray[i].display();
           thoughtsArray[i].reprint();
          
             //thoughtsArray[i].hover();
@@ -109,7 +121,6 @@ mainMap.on('zoomend', function() {
         //reprint at every zoom : 
         thoughtsArray[i].reprint();
         thoughtsArray[i].grow();
-        thoughtsArray[i].hover(); //??THEY REPRINT IN WHITE 
     }
     
     checkTimeArrival();
@@ -128,7 +139,6 @@ mainMap.on('moveend', function() {
         //reprint at every zoom : 
         thoughtsArray[i].reprint();
         thoughtsArray[i].grow();
-        thoughtsArray[i].hover(); //??THEY REPRINT IN WHITE 
 
     }
     
@@ -224,7 +234,6 @@ if (generateNewCard===true){
         sound.play();
     })
     } else if (generateNewCard === false){
-        console.log("hfsjahfkajhs")
         dailyThoughtBox.style= "display : none";
     }
 
@@ -246,7 +255,6 @@ if (generateNewCard===true){
 
     savedListButton.addEventListener("click", function(){
         for (let i=0;i<thoughtsArray.length;i++){
-            console.log(thoughtsArray[i].saved);
         }
         savedListBox.style= "display : block";
     });
@@ -325,6 +333,10 @@ let socketId =-1;
 
            //FUNCTIONS ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀  ❀ 
 
+//The onMapClick function adds a marker to the map at the location where the user double-clicked and opens a modal for the user to input their thoughts.
+//The submitButton event listener waits for the user to submit their thought and then creates a new Thought object with the input values. 
+//The function then saves the Thought object to the thoughtsArray and submits the thought to the database by calling the passingTheVars function. 
+//Finally, it sets a timer for 10 seconds to prevent the user from submitting another thought before that time has elapsed.
 function onMapClick(e){
 
     marker = coordinateMarker.setLatLng(e.latlng) // set the coordinates of the marker to the coordinates of the mouse when it was double clicked
@@ -342,7 +354,7 @@ function onMapClick(e){
     //One submission per day:
     // console.log(coords);
                 let thought = inputThought.value;
-                newThought = new Thought(appendToSaveList, thought, date, mainMap, coords.lat, coords.lng ,thoughtsArray.length,geolocationCity,geolocationCountry);
+                newThought = new Thought("",appendToSaveList, thought, date, mainMap, coords.lat, coords.lng ,thoughtsArray.length,geolocationCity,geolocationCountry);
                 newThought.reprint();
                 localStorage.setItem("timestampKey",newThought.date);
                 thoughtsArray.push(newThought);
@@ -372,33 +384,28 @@ function onMapClick(e){
 //}
 
 
-//pass inputs to db  :
+//The function passingTheVars makes an AJAX GET request to the server with the new thought's properties such as the thought itself, the date, the position (x,y), if it's saved or not, the latitude, longitude, city and country. 
+//If the response is successful, the function removes the marker, sets clickEnabled and inputBoxOpen to false, and assigns the returned thought ID to newThought.thoughtId.
 function passingTheVars(newThought){
     //ajax GET() request : 
 $.get(
  "/thoughtSubmit", //the url page where the response is coming from
  {thought : newThought.thought, date : newThought.date, xPos : newThought.xPos, yPos: newThought.yPos, saved : newThought.saved, lat : newThought.n_latLng.lat, lng : newThought.n_latLng.lng, city : newThought.city, country:newThought.country},
-// if we get a response from the server .... 
+
+ // if we get a response from the server .... 
  function(response) {
     //removes the marker at thought submission:
     clickEnabled=false;
-    console.log(marker);
     inputBoxOpen=false;
     mainMap.removeLayer(marker);
     marker = null;
-
-    console.log('page content: ' + response);
+    newThought.thoughtId=response._id;
  }); //get
+
 }
 
-// for (let i=0;i<newThought.favButtonArray.length;i++){
-//     console.log("SAVED BIHSOGHOURGH");
-
-// }
-// document.getElementsByClassName("hoverButtons").addEventListener("click", function(){
-//     console.log("SAVED BIHSOGHOURGH");
-//     });
-
+//The zoomObj function increases the font size of elements with the class "thoughtEl" based on the current zoom level of a map. 
+//The savedListButton event listener triggers the appendToSaveList function when the button is clicked, which appends saved thoughts to the modal.
 function zoomObj(){
 let fontSize= 2;
 let zoomSize= mainMap.getZoom();
@@ -417,7 +424,19 @@ let zoomOp = fontSize + (zoomSize*2);
         appendToSaveList();
     });
 
-    //appends to the save list
+
+//appendToSaveList() defines two functions and an event listener.
+//The appendToSaveList() function is used to append saved thoughts to a modal window. 
+//It first checks if there are any saved thoughts in local storage, then retrieves and parses them. 
+//Next, it creates a p element for each thought, adds the class saved-prop, and appends it to the savedElements div.
+
+//The usePosition(position) function is a callback function used to retrieve the user's geolocation. 
+//It uses the geolocation object to get the user's latitude and longitude. 
+//It then creates a new google.maps.Geocoder() object and calls its geocode() method to retrieve the user's city and country. 
+//If successful, the geolocationCity and geolocationCountry variables are set. It then updates the locationDataBox div and calls the filterByLocation() function.
+
+//Finally, an event listener is set up to handle clearing the saved thoughts list. 
+//It removes the thoughts and savedIds keys from local storage and sets the saved property of each thought in the thoughtsArray to false.
     function appendToSaveList(){
         if(localStorage.thoughts){
         console.log(localStorage.getItem("thoughts"));
@@ -443,7 +462,10 @@ let zoomOp = fontSize + (zoomSize*2);
 
 //Clear local storage and saved list : 
 document.getElementById("clearList-button").addEventListener("click", function(){
+    //removes from local storage:
     localStorage.removeItem("thoughts");
+    localStorage.removeItem("savedIds");
+    //the saved property of the "thoughts" are false:
     for (let i=0;i<thoughtsArray.length;i++){
         thoughtsArray[i].saved=false;
         console.log(thoughtsArray[i].saved);
@@ -501,6 +523,11 @@ document.getElementById("authorizeLocation").addEventListener("click",() =>{
   });
 
  // THE CALLBACK FUNCTION for geolocation position:
+ //This is a callback function for geolocation position. 
+ //It takes the latitude and longitude values and creates a geocoder object to convert these coordinates into an address. 
+ //It extracts the city and country information from the address and assigns them to geolocationCity and geolocationCountry variables respectively. 
+ //It then updates the locationDataBox element on the HTML page with the city and country information, 
+ //and calls the filterByLocation() function to filter the thoughtsArray based on the location information.
     function usePosition(position) {
     // console.log(position);
     let geocoder = new google.maps.Geocoder();
@@ -536,12 +563,26 @@ for (let i=0; i<response.results[0].address_components.length;i++) {
 }
 
 locationDataBox.innerHTML = geolocationCity+ " , "+ geolocationCountry+".";
-
-
+filterByLocation();
 });
  
 }//function usePosition
 
+//The function filterByLocation() logs the current location (city and country) and iterates through an array called thoughtsArray. 
+//For each element in the array, it checks if the city and country properties match the current location. If they match, it sets a 
+//boolean property called locationFilter to true for that element and underlines the corresponding HTML element's text. Finally, 
+//it logs the length of locationFilter for that element.
+function filterByLocation(){
+    console.log("all are from "+ geolocationCity+", "+ geolocationCountry+". ");
+
+    for (let i=0;i< thoughtsArray.length;i++){
+        if (thoughtsArray[i].city === geolocationCity && thoughtsArray[i].country === geolocationCountry){
+            thoughtsArray[i].locationFilter=true;
+            document.getElementById(thoughtsArray[i].thoughtHoverEl.id).style. textDecoration = "underline";
+            (console.log(thoughtsArray[i].locationFilter.length));
+        }
+    }
+}
 
 }); //get
 }); //end windowOnLoad

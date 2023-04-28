@@ -1,13 +1,13 @@
 let express = require('express');
 const mongoose = require("mongoose");
 // const portNumber=5000;
-const portNumber= process.env.PORT||5000;
+const portNumber= process.env.PORT || 3000;
 const app = express();
 let httpServer = require('http').createServer(app);  // create a server (using the Express framework object)
 require('dotenv').config(); // enables the node librairy dotenv, that is used to enbale the .env file to be read (which stores the connection string to mongo)
 
 const thoughtModel = require("./models");
-const { disconnect } = require('process');
+//const { disconnect } = require('process');
 
 httpServer.listen(portNumber, function (){
     console.log("server running on port"+portNumber);
@@ -22,6 +22,8 @@ mongoose.connect(process.env.MONGODB_URI);
 //the connection is stored in  variable "db" :
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
+
+
 db.once("open", function () {
   console.log("Connected successfully");
 });
@@ -128,4 +130,4 @@ app.get("/thoughts", async (request, response) => {
     }
   });
 
-  module.exports = app;
+
